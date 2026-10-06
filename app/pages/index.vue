@@ -25,14 +25,6 @@ const stats = computed(() => [
         Speaker kennenlernen, den eigenen Zeitplan zusammenstellen — lesbar im abgedunkelten Saal,
         verlässlich auch ohne WLAN.
       </p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <NuxtLink to="/sessions" class="rounded-md bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-900">
-          Programm ansehen
-        </NuxtLink>
-        <NuxtLink to="/speakers" class="rounded-md border border-slate-600 px-4 py-2 text-sm font-semibold">
-          Speaker
-        </NuxtLink>
-      </div>
     </section>
 
     <section aria-labelledby="stats-heading" class="mt-10">

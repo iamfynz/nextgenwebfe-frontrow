@@ -4,6 +4,7 @@
 
 FrontRow ist die Begleit-App zur fiktiven zweitägigen Konferenz **FrontendNow** (15.–16. 9. 2026, Wien):
 Programm filtern, Speaker ansehen, eigenen Zeitplan („Mein Programm") zusammenstellen.
+In Schritt 1 steht nur das Grundgerüst: Layout, Startseite mit Kennzahlen aus dem Datensatz, Composables.
 Funktionalität und Datensatz sind für alle Teams gleich, Branding ist unseres.
 
 ## Setup
@@ -35,11 +36,11 @@ app/                      ← Quellcode (Nuxt-4-Konvention; entspricht /src der 
 ├── assets/css/main.css   Tailwind-Einstieg (Tokens aus A folgen hier)
 ├── components/
 │   ├── base/             Base/UI-Layer (BaseCard, BaseBadge, BaseButton)
-│   ├── features/         Feature-Layer (session/, speaker/, program/)
+│   ├── features/         Feature-Layer (ab Schritt 2)
 │   └── layout/           AppHeader, AppFooter
 ├── composables/          useConferenceData, useSessionFilter, useMyProgram
 ├── layouts/default.vue
-├── pages/                index, sessions/, sessions/[id], speakers/, speakers/[id], mein-programm
+├── pages/                index (weitere Seiten ab Schritt 2)
 └── types/conference.ts
 public/data/conference-data.json   geteilter, schreibgeschützter Datensatz
 docs/schritt1/                     Deliverables A–D

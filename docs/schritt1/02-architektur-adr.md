@@ -46,14 +46,11 @@ app/
 ├── assets/css/main.css        Tailwind-Einstieg
 ├── components/
 │   ├── base/                  Base/UI-Layer: domänenfrei (BaseCard, BaseBadge, BaseButton)
-│   ├── features/
-│   │   ├── session/           SessionCard, SessionFilterBar (Darstellung der Filter)
-│   │   ├── speaker/           SpeakerCard
-│   │   └── program/           ProgramToggle
+│   ├── features/              (ab Schritt 2) session/: SessionCard, SessionFilterBar · speaker/: SpeakerCard · program/: ProgramToggle
 │   └── layout/                AppHeader, AppFooter
 ├── composables/               useConferenceData, useSessionFilter, useMyProgram
 ├── layouts/default.vue
-├── pages/                     index, sessions/, sessions/[id], speakers/, speakers/[id], mein-programm
+├── pages/                     index (Schritt 1) · ab Schritt 2: sessions/, sessions/[id], speakers/, speakers/[id], mein-programm
 └── types/conference.ts
 public/data/conference-data.json
 docs/schritt1/
@@ -67,6 +64,8 @@ docs/schritt1/
 - Komponenten werden **ohne Pfad-Präfix** registriert (`pathPrefix: false`) → Dateinamen müssen projektweit eindeutig sein.
 
 ## Komponentenübersicht
+
+In Schritt 1 existieren `pages/index`, die Layout- und Base-Komponenten sowie die drei Composables. Feature-Komponenten und weitere Seiten sind geplant und zur Einordnung bereits eingezeichnet.
 
 ```mermaid
 flowchart TD
