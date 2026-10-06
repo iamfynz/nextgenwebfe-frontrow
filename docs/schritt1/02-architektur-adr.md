@@ -45,10 +45,10 @@ Option 1 (technische Schichten) + Option A (Filter headless).
 app/
 ├── assets/css/main.css        Tailwind-Einstieg
 ├── components/
-│   ├── base/                  Base/UI-Layer: domänenfrei (BaseCard, BaseBadge, BaseButton)
+│   ├── base/                  Base/UI-Layer: domänenfrei (BaseCard; ab Schritt 2 BaseBadge, BaseButton)
 │   ├── features/              (ab Schritt 2) session/: SessionCard, SessionFilterBar · speaker/: SpeakerCard · program/: ProgramToggle
 │   └── layout/                AppHeader, AppFooter
-├── composables/               useConferenceData, useSessionFilter, useMyProgram
+├── composables/               useConferenceData (Schritt 1) · ab Schritt 2: useSessionFilter, useMyProgram
 ├── layouts/default.vue
 ├── pages/                     index (Schritt 1) · ab Schritt 2: sessions/, sessions/[id], speakers/, speakers/[id], mein-programm
 └── types/conference.ts
@@ -66,7 +66,7 @@ docs/schritt1/
 
 ## Komponentenübersicht
 
-In Schritt 1 existieren `pages/index`, die Layout- und Base-Komponenten sowie die drei Composables. Feature-Komponenten und weitere Seiten sind geplant und zur Einordnung bereits eingezeichnet.
+In Schritt 1 existieren `pages/index`, Layout, `BaseCard` und `useConferenceData`. Alle anderen Knoten sind geplant und zur Einordnung bereits eingezeichnet; sie entstehen mit den Seiten in Schritt 2.
 
 ```mermaid
 flowchart TD

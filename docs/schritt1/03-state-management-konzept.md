@@ -1,6 +1,7 @@
 # C — State-Management-Konzept: „Mein Programm" & conference-data.json
 
 > Federführung: Person 2 · Status: **Entwurf** (Cross-Review ausständig)
+> Umsetzungsstand: `useConferenceData()` ist in Schritt 1 implementiert; `useMyProgram()` und die Domänen-Composables sind hier als Konzept beschrieben und folgen mit den Seiten in Schritt 2.
 
 ## Zwei Arten von State
 

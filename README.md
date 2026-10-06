@@ -35,10 +35,10 @@ Nuxt 4 · Vue 3 · TypeScript · Tailwind CSS v4
 app/                      ← Quellcode (Nuxt-4-Konvention; entspricht /src der Abgabe)
 ├── assets/css/main.css   Tailwind-Einstieg (Tokens aus A folgen hier)
 ├── components/
-│   ├── base/             Base/UI-Layer (BaseCard, BaseBadge, BaseButton)
+│   ├── base/             Base/UI-Layer (BaseCard)
 │   ├── features/         Feature-Layer (ab Schritt 2)
 │   └── layout/           AppHeader, AppFooter
-├── composables/          useConferenceData, useSessionFilter, useMyProgram
+├── composables/          useConferenceData (weitere ab Schritt 2)
 ├── layouts/default.vue
 ├── pages/                index (weitere Seiten ab Schritt 2)
 └── types/conference.ts
