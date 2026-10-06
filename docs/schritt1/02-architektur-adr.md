@@ -61,6 +61,7 @@ docs/schritt1/
 - **Feature** kennt die Domäne, erhält aufgelöste Daten per Props (SessionCard bekommt Track/Room/Speaker fertig) oder nutzt Composables (ProgramToggle), komponiert Base-Komponenten.
 - **Layout** rahmt Seiten (Header/Footer), kennt Navigation und globalen Zähler.
 - **Pages** orchestrieren: `await useConferenceData()`, Filter-Composable, Übergabe an Features. Kein Markup-Detail.
+- **Composables** sind zweischichtig: `useConferenceData` (Datenschicht: laden, indizieren, joinen) und darauf aufbauende Domänen-Composables (`useSessionFilter`, `useMyProgram`, ab Schritt 2 `useSessions`/`useSpeakers`). Nur die Datenschicht ruft `useAsyncData` auf. Details in [Konzept C](./03-state-management-konzept.md).
 - Komponenten werden **ohne Pfad-Präfix** registriert (`pathPrefix: false`) → Dateinamen müssen projektweit eindeutig sein.
 
 ## Komponentenübersicht

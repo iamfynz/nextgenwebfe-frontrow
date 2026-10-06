@@ -25,6 +25,9 @@ async function loadConferenceData(): Promise<ConferenceData> {
  *   und cached es bei Client-Navigation.
  * - Muss in `<script setup>` mit `await` aufgerufen werden, damit SSR/SSG die Daten
  *   bereits im HTML rendern.
+ * - Datenschicht: laden, indizieren, joinen. Domänenlogik (Sortierung, Gruppierung, Filter)
+ *   gehört in Domänen-Composables, die hierauf aufbauen (useSessionFilter, useMyProgram, …).
+ *   Nur diese Datei ruft useAsyncData für den Datensatz auf.
  */
 export async function useConferenceData() {
   const { data, status, error, refresh } = await useAsyncData<ConferenceData>(ASYNC_KEY, loadConferenceData)

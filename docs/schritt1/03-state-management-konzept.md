@@ -4,7 +4,7 @@
 
 ## Zwei Arten von State
 
-FrontRow hat genau zwei State-Quellen mit gegensätzlichen Eigenschaften:
+Zwei State-Quellen mit gegensätzlichen Eigenschaften:
 
 | | Geteilter Datensatz | „Mein Programm" |
 |---|---|---|
@@ -13,25 +13,30 @@ FrontRow hat genau zwei State-Quellen mit gegensätzlichen Eigenschaften:
 | Größe | 20 Sessions, 18 Speaker | einige IDs |
 | Rendering | darf serverseitig/statisch gerendert werden | nur im Browser bekannt |
 
-Deshalb werden sie getrennt modelliert, in zwei Composables, ohne zusätzliche Library.
+Sie werden getrennt modelliert, in zwei Composables, ohne zusätzliche Library.
 
 ## Geteilter Datensatz: `useConferenceData()`
 
-**Laden.** Ein `useAsyncData('conference-data', …)` mit festem Key. Nuxt dedupliziert damit parallele Aufrufe aus mehreren Komponenten, überträgt das Ergebnis im Payload vom Server zum Client (kein zweiter Fetch nach der Hydration) und cached es bei Client-Navigation. Serverseitig/beim Prerendern wird die Datei direkt importiert, clientseitig per HTTP aus `/public/data/` geladen — derselbe Pfad, den später der Service Worker cachen kann. Die Quelle ist an genau einer Stelle austauschbar (GitHub-Raw-URL, Nitro-Route für die ISR-Simulation in Schritt 2).
+**Laden.** Ein `useAsyncData('conference-data', …)` mit festem Key: Nuxt dedupliziert parallele Aufrufe, überträgt das Ergebnis im Payload vom Server zum Client (kein zweiter Fetch) und cached es bei Client-Navigation. Serverseitig wird die Datei importiert, clientseitig per HTTP aus `/public/data/` geladen — der Pfad, den später der Service Worker cachen kann. Die Quelle ist an einer Stelle austauschbar (GitHub-Raw-URL, Nitro-Route für Schritt 2).
 
-**Modellieren.** Das Composable gibt die vier Listen als `computed` zurück sowie `Map`-Indizes für O(1)-Lookups (`getSession(id)`, `getSpeaker(id)`, …) und die Joins `speakersForSession()` / `sessionsForSpeaker()`. Komponenten bekommen aufgelöste Objekte per Props; niemand joint im Template.
+**Modellieren.** Vier Listen als `computed`, `Map`-Indizes für O(1)-Lookups (`getSession(id)` …) und die Joins `speakersForSession()` / `sessionsForSpeaker()`. Komponenten bekommen aufgelöste Objekte per Props; niemand joint im Template.
 
-**Verworfene Alternative:** je ein Composable pro Entität (`useSpeaker`, `useRoom`, `useTrack`, `useSession`). Die Daten kommen aus einer Datei; vier Composables hieße entweder vierfach laden oder verstecktes Modul-State teilen, und die Join-Logik (Session → Speaker → Sessions) wäre zerrissen. Bei vier Entitäten mit Querverweisen ist ein Daten-Composable mit Lookups die einfachere und ehrlichere Lösung.
+**Schichtung statt Composable pro Entität.** Ein Composable je Entität (`useSpeaker`, `useRoom` …), das jeweils selbst lädt, hieße vierfach laden oder verstecktes Teilen eines Keys, und die Joins wären zerrissen. Stattdessen zwei Ebenen:
+
+- **Datenschicht** `useConferenceData()`: laden, indizieren, joinen. Kennt keine Sortierung, keine Zeitslots, keine Anzeige.
+- **Domänenschicht** (`useSessions()`, `useSpeakers()`, ab Schritt 2): baut auf der Datenschicht auf und liefert, was die Domäne braucht, etwa Sessions nach Tag/Uhrzeit sortiert oder nach Zeitslot gruppiert. `useSessionFilter()` und `useMyProgram()` sind bereits solche Domänen-Composables.
+
+Regel: Ein Domänen-Composable ruft nie selbst `useAsyncData` auf, sondern immer `useConferenceData()`. In Schritt 1 gibt es noch keine Domänenlogik; reine Durchreich-Composables wären Abstraktion als Selbstzweck und entstehen erst mit echtem Bedarf.
 
 ## Persönlicher State: `useMyProgram()`
 
-**Datenstruktur: nur IDs** (`string[]`), nicht volle Session-Objekte. Begründung: Eine einzige Quelle der Wahrheit — ändert sich im Datensatz ein Raum oder eine Uhrzeit (genau das Szenario von Schritt 2), zeigt „Mein Programm" automatisch den aktuellen Stand statt einer veralteten Kopie. Kein Schema-Migrationsproblem, wenn sich `Session` erweitert. Winziger Storage-Footprint. Der Preis: Der Datensatz muss geladen sein, bevor das Programm angezeigt werden kann — er ist ohnehin auf jeder Seite geladen und wird in Schritt 3 offline gecached. Gelöschte IDs werden beim Auflösen still gefiltert.
+**Datenstruktur: nur IDs** (`string[]`), nicht volle Session-Objekte. Ändert sich im Datensatz ein Raum oder eine Uhrzeit (das Szenario von Schritt 2), zeigt „Mein Programm" automatisch den aktuellen Stand statt einer veralteten Kopie. Kein Migrationsproblem bei Schema-Änderungen, winziger Storage-Footprint. Der Preis: Der Datensatz muss geladen sein — er ist auf jeder Seite geladen und wird in Schritt 3 offline gecached. Gelöschte IDs werden beim Auflösen still gefiltert.
 
-**Reaktive Verteilung: `useState`.** Nuxts `useState('my-program')` ist pro Key app-weit geteilt und SSR-sicher. Header-Zähler, `ProgramToggle` in jeder Karte und das Dashboard lesen dieselbe Referenz. Pinia wäre eine legitime Alternative, für ein einzelnes Array mit vier Mutationen aber eine zusätzliche Abhängigkeit ohne Mehrwert. Reines Modul-`ref` (wie in Hausübung 2) wäre unter SSR ein Shared-State-Leck zwischen Requests.
+**Reaktive Verteilung: `useState`.** Pro Key app-weit geteilt und SSR-sicher; Header-Zähler, Toggle und Dashboard lesen dieselbe Referenz. Pinia wäre legitim, für ein Array mit vier Mutationen aber eine Abhängigkeit ohne Mehrwert. Ein Modul-`ref` (wie in Hausübung 2) wäre unter SSR ein Shared-State-Leck zwischen Requests.
 
-**Persistenz.** Key `frontrow:my-program:v1` (Versionssuffix für spätere Migrationen). Schreiben passiert explizit in den Mutationen `add/remove/toggle/clear`, nicht über einen Watcher, der am Scope einer Komponente hängen und mit ihr verschwinden würde. Fehler (Quota, Private Mode) schlagen still fehl; der State bleibt im Speicher.
+**Persistenz.** Key `frontrow:my-program:v1` (Versionssuffix für Migrationen). Geschrieben wird explizit in den Mutationen, nicht über einen Watcher, der am Scope einer Komponente hinge. Fehler (Quota, Private Mode) schlagen still fehl.
 
-**Rehydration.** Erst in `onMounted`, einmalig (Flag `isHydrated`). Damit sind Server-HTML und erster Client-Render identisch (kein Hydration-Mismatch); unmittelbar danach erscheinen die gespeicherten Sessions. Bis dahin ist der Toggle deaktiviert und das Dashboard zeigt einen Ladehinweis. Dass dieser Teil clientabhängig ist, ist die Vorlage für die Rendering-Entscheidung „Mein Programm = CSR" in Schritt 2.
+**Rehydration.** Erst in `onMounted`, einmalig (Flag `isHydrated`), damit Server-HTML und erster Client-Render identisch sind (kein Hydration-Mismatch). Bis dahin zeigt das Dashboard einen Ladehinweis. Dass dieser Teil clientabhängig ist, ist die Vorlage für „Mein Programm = CSR" in Schritt 2.
 
 ## Datenfluss
 
