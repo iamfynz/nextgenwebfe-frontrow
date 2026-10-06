@@ -18,9 +18,9 @@ Sie werden getrennt modelliert, in zwei Composables, ohne zusätzliche Library.
 
 ## Geteilter Datensatz: `useConferenceData()`
 
-**Laden.** Ein `useAsyncData('conference-data', …)` mit festem Key: Nuxt dedupliziert parallele Aufrufe, überträgt das Ergebnis im Payload vom Server zum Client (kein zweiter Fetch) und cached es bei Client-Navigation. Serverseitig wird die Datei importiert, clientseitig per HTTP aus `/public/data/` geladen — der Pfad, den später der Service Worker cachen kann. Die Quelle ist an einer Stelle austauschbar (GitHub-Raw-URL, Nitro-Route für Schritt 2).
+**Laden.** Ein `useAsyncData('conference-data', …)` mit festem Key: Nuxt dedupliziert parallele Aufrufe, überträgt das Ergebnis im Payload vom Server zum Client (kein zweiter Fetch) und cached es bei Client-Navigation. Serverseitig wird die Datei importiert, clientseitig per HTTP aus `/public/data/` geladen — der Pfad, den später der Service Worker cachen kann. Die Quelle ist an einer Stelle austauschbar (GitHub-Raw-URL, Nitro-Route für Schritt 2). In `localStorage` wird der Datensatz bewusst nicht kopiert: Er ist für alle gleich, eine lokale Kopie veraltet, und Offline-Verfügbarkeit löst in Schritt 3 der Service Worker auf HTTP-Ebene.
 
-**Modellieren.** Vier Listen als `computed`, `Map`-Indizes für O(1)-Lookups (`getSession(id)` …) und die Joins `speakersForSession()` / `sessionsForSpeaker()`. Komponenten bekommen aufgelöste Objekte per Props; niemand joint im Template.
+**Modellieren.** Vier Listen als `computed`, `Map`-Indizes für O(1)-Lookups (`getSession(id)` …) und die Joins `speakersForSession()` / `sessionsForSpeaker()`. Komponenten bekommen aufgelöste Objekte per Props.
 
 **Schichtung statt Composable pro Entität.** Ein Composable je Entität (`useSpeaker`, `useRoom` …), das jeweils selbst lädt, hieße vierfach laden oder verstecktes Teilen eines Keys, und die Joins wären zerrissen. Stattdessen zwei Ebenen:
 
@@ -78,4 +78,4 @@ sequenceDiagram
 - (+) Eine Datenquelle, keine Kopien; Programmänderungen schlagen überall durch.
 - (+) Kein Store-Framework, zwei kleine Composables, alles typisiert.
 - (−) Kurzes Aufblitzen des leeren Zustands vor der Rehydration (wird in Schritt 2 durch CSR/`<ClientOnly>` für das Dashboard adressiert).
-- (−) Keine Synchronisation zwischen Tabs (per `storage`-Event ergänzbar, aktuell nicht gefordert).
+- (−) Keine Synchronisation zwischen Tabs (per `storage`-Event ergänzbar).
