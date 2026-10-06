@@ -7,13 +7,15 @@
 
 Drei Seitentypen: Übersichten mit Filter, Detailseiten mit dynamischen Parametern (`/sessions/:id`, `/speakers/:id`) und ein personalisiertes Dashboard. Kein Backend, Daten aus einer statischen JSON-Datei. Folgesprints bringen weitere Anforderungen pro Seitentyp (Schritt 2) und PWA/Offline (Schritt 3). Das Team (2 Personen) kennt Vite + Vue 3 + TypeScript + Tailwind aus den Hausübungen, aber weder Nuxt noch Vue Router. Das Szenario empfiehlt Nuxt.
 
+Kriterien: Routing-Bedarf, Team-Erfahrung, spätere Anforderungen (Schritt 2 und 3), Einarbeitungsaufwand.
+
 ## Optionen
 
 **Option 1 — Vue 3 + Vite + vue-router (manuell)**
 + Vertraut aus den Hausübungen; minimaler Magie-Anteil; schnellster Start.
 − Routing, Layouts, `<head>`-Management und geteiltes Daten-Fetching müssen selbst verdrahtet werden. Wächst der Bedarf in Schritt 2 über reines Client-Rendering hinaus, wäre ein zweites Setup (z. B. vite-ssg oder Vike) nötig — eine spätere Technologieentscheidung mit Migrationsaufwand.
 
-**Option 2 — Nuxt 4 (gewählt)**
+**Option 2 — Nuxt 4**
 + Dateibasiertes Routing deckt alle drei Seitentypen ab (`pages/sessions/[id].vue`), Layouts und `useHead` inklusive.
 + `useAsyncData`/`useState` lösen Daten-Deduplizierung und geteilten State ohne Zusatzbibliothek.
 + Die Rendering-Entscheidung von Schritt 2 bleibt offen: Nuxt erlaubt sie später pro Route, ohne Setup-Wechsel.
@@ -28,9 +30,16 @@ Drei Seitentypen: Übersichten mit Filter, Detailseiten mit dynamischen Paramete
 
 **Nuxt 4** mit TypeScript, **Tailwind CSS v4** (via `@tailwindcss/vite`) und npm.
 
-Tailwind-Begründung: Das Team kennt es aus Hausübung 2. Die Design Tokens aus A werden separat über Tailwinds `@theme` eingebunden, damit Komponenten später nur benannte Tokens statt Rohwerte verwenden.
+| Kriterium | Vite + vue-router | Nuxt 4 | Astro |
+|---|---|---|---|
+| Routing-Bedarf (3 Seitentypen, dynamische Parameter) | manuell | dateibasiert | dateibasiert |
+| Team-Erfahrung | hoch | keine | keine |
+| Spätere Anforderungen (Schritt 2/3) | zweites Setup nötig | im Framework | nur mit Inseln |
+| Einarbeitungsaufwand | gering | mittel | mittel bis hoch |
 
-Bewusst **nicht** aufgenommen: Pinia (ein ID-Array rechtfertigt keinen Store), VueUse (`useLocalStorage` würde das Hydration-Problem verdecken), Webfonts (Offline-Ziel). TypeScript ist auf 5.x gepinnt, weil `vue-tsc` TypeScript 7 noch nicht unterstützt.
+Tailwind-Begründung: Das Team kennt es aus Hausübung 2. Die Einbindung der Design Tokens aus A ist mit Tailwind v4 über `@theme` möglich; die Umsetzung liegt bei A.
+
+Bewusst **nicht** aufgenommen: Pinia (ein ID-Array rechtfertigt keinen Store), VueUse (ein ID-Array braucht keine Bibliothek, und die Rehydration soll im eigenen Composable sichtbar bleiben), Webfonts (Offline-Ziel). TypeScript ist auf 5.x gepinnt, weil `vue-tsc` TypeScript 7 noch nicht unterstützt.
 
 ## Konsequenzen
 

@@ -22,7 +22,6 @@ export default defineNuxtConfig({
       title: 'FrontRow — FrontendNow 2026',
       meta: [
         { name: 'description', content: 'FrontRow: dein Platz in der ersten Reihe der FrontendNow 2026 in Wien.' },
-        { name: 'theme-color', content: '#3344C7' },
       ],
     },
   },

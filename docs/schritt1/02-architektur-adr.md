@@ -10,7 +10,7 @@ FrontRow braucht drei Seitentypen (Übersichten mit Filter, Detailseiten, person
 
 ### Ordnerstruktur
 
-**Option 1 — Technische Schichten (gewählt)**
+**Option 1 — Technische Schichten**
 `components/base`, `components/features/<domäne>`, `components/layout`, dazu `composables/`, `pages/`, `layouts/`, `types/`.
 + Entspricht der geforderten Schichtung Base/UI → Feature → Layout; passt zu Nuxt-Konventionen; Base-Komponenten sind sofort als domänenfrei erkennbar.
 − Bei starkem Wachstum liegen Composable und Komponente eines Features in verschiedenen Ordnern.
@@ -21,11 +21,14 @@ FrontRow braucht drei Seitentypen (Übersichten mit Filter, Detailseiten, person
 − Kollidiert mit Nuxt-Auto-Import-Konventionen (`pages/`, `composables/` müssen konfiguriert werden); für 3 Domänen und 2 Personen Overhead ohne Nutzen.
 
 **Option 3 — Flache Struktur (ursprünglicher Teamvorschlag: `components/{layouts,basics,views}`, `router/`)**
++ Wenige Ordner, aus Hausübung 2 vertraut, kein Nuxt-Wissen nötig.
 − `router/` und `views/` sind Vue-Router-Konzepte, die in Nuxt durch `pages/` ersetzt werden; `components/layouts` kollidiert mit Nuxts `layouts/`; eine Feature-Schicht fehlt → verworfen, weil das Grundgerüst der Dokumentation widersprechen würde.
 
 ### Headless-Aufteilung für die zentrale Interaktion „Session-Filterung"
 
-**Option A — Logik als Composable `useSessionFilter()`, Darstellung in `SessionFilterBar.vue` (gewählt)**
+Die Interaktion wird in Schritt 2 umgesetzt; hier wird die Aufteilung vorab entschieden.
+
+**Option A — Logik als Composable `useSessionFilter()`, Darstellung in `SessionFilterBar.vue`**
 + Filterzustand und Ableitung sind reine Daten (kein DOM) → ohne Mounting testbar.
 + Dieselbe Logik dient der Programmübersicht und „Mein Programm" (z. B. nach Tag filtern).
 + Die Darstellung ist austauschbar: Selects am Desktop, Chips/Bottom-Sheet am Handy — ohne die Logik anzufassen. URL-Synchronisation (Query-Params) lässt sich später im Composable ergänzen, ohne UI-Änderung.
@@ -35,7 +38,7 @@ FrontRow braucht drei Seitentypen (Übersichten mit Filter, Detailseiten, person
 − Logik und Markup verwachsen; jede zweite Verwendung kopiert Code; Tests brauchen DOM.
 
 **Gegenprobe (bewusst nicht headless): „Zum Programm hinzufügen"**
-Die Logik ist ein `toggle(id)` auf dem geteilten `useMyProgram()`-State. `ProgramToggle.vue` ruft es direkt auf. Ein eigenes Headless-Composable hätte hier keinen Nutzen — es gäbe nichts zu abstrahieren. Headless wird dort eingesetzt, wo echte Wiederverwendung oder Austauschbarkeit entsteht, nicht als Selbstzweck.
+Die Logik ist ein `toggle(id)` auf dem geteilten `useMyProgram()`-State. `ProgramToggle.vue` wird es direkt aufrufen. Ein eigenes Headless-Composable hätte hier keinen Nutzen — es gäbe nichts zu abstrahieren. Headless wird dort eingesetzt, wo echte Wiederverwendung oder Austauschbarkeit entsteht, nicht als Selbstzweck.
 
 ## Entscheidung
 
@@ -59,14 +62,14 @@ docs/schritt1/
 **Schicht-Regeln:**
 - **Base** kennt keine Domäne, keinen State, nur Props/Slots.
 - **Feature** kennt die Domäne, erhält aufgelöste Daten per Props (SessionCard bekommt Track/Room/Speaker fertig) oder nutzt Composables (ProgramToggle), komponiert Base-Komponenten.
-- **Layout** rahmt Seiten (Header/Footer), kennt Navigation und globalen Zähler.
+- **Layout** rahmt Seiten (Header/Footer), kennt Navigation und globalen Zähler (ab Schritt 2).
 - **Pages** orchestrieren: `await useConferenceData()`, Filter-Composable, Übergabe an Features. Kein Markup-Detail.
 - **Composables** sind zweischichtig: `useConferenceData` (Datenschicht: laden, indizieren, joinen) und darauf aufbauende Domänen-Composables (`useSessionFilter`, `useMyProgram`, ab Schritt 2 `useSessions`/`useSpeakers`). Nur die Datenschicht ruft `useAsyncData` auf. Details in [Konzept C](./03-state-management-konzept.md).
 - Komponenten werden **ohne Pfad-Präfix** registriert (`pathPrefix: false`) → Dateinamen müssen projektweit eindeutig sein.
 
 ## Komponentenübersicht
 
-In Schritt 1 existieren `pages/index`, Layout, `BaseCard` und `useConferenceData`. Alle anderen Knoten sind geplant und zur Einordnung bereits eingezeichnet; sie entstehen mit den Seiten in Schritt 2.
+In Schritt 1 existieren `pages/index`, Layout, `BaseCard` und `useConferenceData`. Diese Knoten sind im Diagramm hervorgehoben. Alle anderen sind geplant und zur Einordnung bereits eingezeichnet; sie entstehen mit den Seiten in Schritt 2.
 
 ```mermaid
 flowchart TD
@@ -110,11 +113,13 @@ flowchart TD
   F3 --> B1
   F2 --> B3
   F4 --> B3
+  classDef done fill:#e2e8f0,stroke:#334155,stroke-width:2px
+  class P1,C1,B1,L1,L2 done
 ```
 
 ## Konsequenzen
 
-- (+) Gradable Konsistenz: das Grundgerüst entspricht 1:1 dieser Struktur.
+- (+) Jeder neue Teil hat einen eindeutigen Platz; die Schicht-Regeln beantworten im Review die Frage „wo gehört das hin".
 - (+) Base-Komponenten sind Kandidaten für eine spätere Komponentenbibliothek; Feature-Komponenten bleiben dünn.
 - (+) Filterlogik ist ohne Browser testbar (Vitest, später).
 - (−) Eindeutige Dateinamen sind Pflicht (Konvention: Präfix `Base*`, `App*`, Domäne im Namen).

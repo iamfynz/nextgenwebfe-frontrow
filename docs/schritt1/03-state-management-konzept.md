@@ -14,7 +14,7 @@ Zwei State-Quellen mit gegensätzlichen Eigenschaften:
 | Größe | 20 Sessions, 18 Speaker | einige IDs |
 | Rendering | darf serverseitig/statisch gerendert werden | nur im Browser bekannt |
 
-Sie werden getrennt modelliert, in zwei Composables, ohne zusätzliche Library.
+Sie werden getrennt modelliert, in eigenen Composables, ohne zusätzliche Library.
 
 ## Geteilter Datensatz: `useConferenceData()`
 
@@ -25,13 +25,13 @@ Sie werden getrennt modelliert, in zwei Composables, ohne zusätzliche Library.
 **Schichtung statt Composable pro Entität.** Ein Composable je Entität (`useSpeaker`, `useRoom` …), das jeweils selbst lädt, hieße vierfach laden oder verstecktes Teilen eines Keys, und die Joins wären zerrissen. Stattdessen zwei Ebenen:
 
 - **Datenschicht** `useConferenceData()`: laden, indizieren, joinen. Kennt keine Sortierung, keine Zeitslots, keine Anzeige.
-- **Domänenschicht** (`useSessions()`, `useSpeakers()`, ab Schritt 2): baut auf der Datenschicht auf und liefert, was die Domäne braucht, etwa Sessions nach Tag/Uhrzeit sortiert oder nach Zeitslot gruppiert. `useSessionFilter()` und `useMyProgram()` sind bereits solche Domänen-Composables.
+- **Domänenschicht** (`useSessions()`, `useSpeakers()`, ab Schritt 2): baut auf der Datenschicht auf und liefert, was die Domäne braucht, etwa Sessions nach Tag/Uhrzeit sortiert oder nach Zeitslot gruppiert. `useSessionFilter()` und `useMyProgram()` sind solche Domänen-Composables.
 
 Regel: Ein Domänen-Composable ruft nie selbst `useAsyncData` auf, sondern immer `useConferenceData()`. In Schritt 1 gibt es noch keine Domänenlogik; reine Durchreich-Composables wären Abstraktion als Selbstzweck und entstehen erst mit echtem Bedarf.
 
 ## Persönlicher State: `useMyProgram()`
 
-**Datenstruktur: nur IDs** (`string[]`), nicht volle Session-Objekte. Ändert sich im Datensatz ein Raum oder eine Uhrzeit (das Szenario von Schritt 2), zeigt „Mein Programm" automatisch den aktuellen Stand statt einer veralteten Kopie. Kein Migrationsproblem bei Schema-Änderungen, winziger Storage-Footprint. Der Preis: Der Datensatz muss geladen sein — er ist auf jeder Seite geladen und wird in Schritt 3 offline gecached. Gelöschte IDs werden beim Auflösen still gefiltert.
+**Datenstruktur: nur IDs** (`string[]`), nicht volle Session-Objekte. Ändert sich im Datensatz ein Raum oder eine Uhrzeit (das Szenario von Schritt 2), zeigt „Mein Programm" automatisch den aktuellen Stand statt einer veralteten Kopie. Kein Migrationsproblem bei Schema-Änderungen, winziger Storage-Footprint. Volle Objekte hätten einen einzigen Vorteil, die Anzeige ohne geladenen Datensatz; er entfällt, sobald der Service Worker in Schritt 3 den Datensatz cached. Der Preis der IDs: Der Datensatz muss geladen sein — er ist auf jeder Seite geladen und wird in Schritt 3 offline gecached. Gelöschte IDs werden beim Auflösen still gefiltert.
 
 **Reaktive Verteilung: `useState`.** Pro Key app-weit geteilt und SSR-sicher; Header-Zähler, Toggle und Dashboard lesen dieselbe Referenz. Pinia wäre legitim, für ein Array mit vier Mutationen aber eine Abhängigkeit ohne Mehrwert. Ein Modul-`ref` (wie in Hausübung 2) wäre unter SSR ein Shared-State-Leck zwischen Requests.
 
@@ -49,7 +49,7 @@ sequenceDiagram
   participant MP as useMyProgram()
   participant LS as localStorage
 
-  Note over Page: Erstaufruf (SSR / SSG)
+  Note over Page: Erstaufruf oder Neuladen der Seite
   Page->>CD: await useConferenceData()
   CD->>JSON: import (Server) · $fetch (Client)
   JSON-->>CD: ConferenceData
