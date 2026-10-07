@@ -6,7 +6,7 @@ defineProps<{ as?: string }>()
 <template>
   <component
     :is="as ?? 'article'"
-    class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
+    class="rounded-lg  bg-background-card p-4"
   >
     <header v-if="$slots.header" class="mb-3">
       <slot name="header" />
