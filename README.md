@@ -51,7 +51,7 @@ docs/schritt1/                     Deliverables A–D
 
 | | Dokument |
 |---|---|
-| A | [Branding-Konzept & Design Tokens](docs/schritt1/branding-konzept.md) |
+| A | [Branding-Konzept & Design Tokens](docs/schritt1/01-branding-konzept.md) |
 | B | [ADR Komponenten- & Ordnerstruktur](docs/schritt1/02-architektur-adr.md) |
 | C | [State-Management-Konzept](docs/schritt1/03-state-management-konzept.md) |
 | D | [ADR Projekt-Setup](docs/schritt1/04-technologie-adr.md) |
