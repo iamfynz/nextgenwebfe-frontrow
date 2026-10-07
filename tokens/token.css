@@ -1,0 +1,121 @@
+:root {
+  /* Primitive Tokens: Farben */
+  --primitive-color-green-500: #102928;
+  --primitive-color-green-400: #1B3F3D;
+  --primitive-color-green-300: #3D5A59;
+  --primitive-color-green-200: #6A8684;
+  --primitive-color-green-100: #CADAD9;
+
+  --primitive-color-cream-500: #FEFCF7;
+  --primitive-color-cream-600: #F6F4F2;
+  --primitive-color-cream-700: #E6E2DC;
+  --primitive-color-cream-800: #82807C;
+  --primitive-color-cream-900: #484745;
+
+  --primitive-color-blue: #57B1E5;
+  --primitive-color-mint: #BBF6E2;
+  --primitive-color-lime: #C4FE36;
+  --primitive-color-pink: #FDD7F2;
+  --primitive-color-red: #C64710;
+
+  /* Primitive Tokens: Fonts */
+  --primitive-font-gothic: "Science Gothic", sans-serif;
+  --primitive-font-sans: "Inter", sans-serif;
+
+  /* Primitive Tokens: Spaces */
+  --primitive-space-1: 0.25rem;
+  --primitive-space-2: 0.5rem;
+  --primitive-space-3: 1rem;
+  --primitive-space-4: 1.5rem;
+  --primitive-space-5: 2rem;
+  --primitive-space-6: 3rem;
+  --primitive-space-7: 4rem;
+  --primitive-space-8: 6rem;
+  --primitive-space-9: 8rem;
+  --primitive-space-10: 10rem;
+
+  /* Primitive Tokens: Radius */
+  --primitive-radius-small: 0.5rem;
+  --primitive-radius-medium: 1rem;
+  --primitive-radius-pill: 9999px;
+
+  /* Primitive Tokens: Font Sizes */
+  --primitive-font-size-small: 0.875rem;
+  --primitive-font-size-base: 1rem;
+  --primitive-font-size-large: 1.25rem;
+  --primitive-font-size-xl: 1.5rem;
+  --primitive-font-size-2xl: 2rem;
+  --primitive-font-size-3xl: 3rem;
+
+  /* Semantische Farbwerte: später pro Theme überschreibbar */
+  --token-background: var(--primitive-color-cream-500);
+  --token-background-contrast: var(--primitive-color-green-500);
+  --token-background-card: var(--primitive-color-cream-600);
+  --token-background-footer: var(--primitive-color-cream-600);
+  --token-surface: var(--primitive-color-mint);
+
+  --token-text-primary: var(--primitive-color-green-500);
+  --token-text-light: var(--primitive-color-green-200);
+  --token-text-contrast-primary: var(--primitive-color-cream-500);
+  --token-text-contrast-light: var(--primitive-color-cream-700);
+  --token-text-color: var(--primitive-color-lime);
+
+  --token-primary: var(--primitive-color-lime);
+  --token-secondary: var(--primitive-color-blue);
+  --token-tertiary: var(--primitive-color-pink);
+  --token-warning: var(--primitive-color-red);
+
+  --token-border-light: var(--primitive-color-green-100);
+  --token-border-dark: var(--primitive-color-green-500);
+  --token-border-contrast-light: var(--primitive-color-cream-500);
+  --token-border-contrast-dark: var(--primitive-color-cream-700);
+}
+
+/* Semantische Tokens → Tailwind-Utilities */
+@theme inline {
+  --color-background: var(--token-background);
+  --color-background-contrast: var(--token-background-contrast);
+  --color-background-card: var(--token-background-card);
+  --color-background-footer: var(--token-background-footer);
+  --color-surface: var(--token-surface);
+
+  --color-text-primary: var(--token-text-primary);
+  --color-text-light: var(--token-text-light);
+  --color-text-contrast-primary: var(--token-text-contrast-primary);
+  --color-text-contrast-light: var(--token-text-contrast-light);
+  --color-text-color: var(--token-text-color);
+
+  --color-primary: var(--token-primary);
+  --color-secondary: var(--token-secondary);
+  --color-tertiary: var(--token-tertiary);
+  --color-warning: var(--token-warning);
+
+  --color-border-light: var(--token-border-light);
+  --color-border-dark: var(--token-border-dark);
+  --color-border-contrast-light: var(--token-border-contrast-light);
+  --color-border-contrast-dark: var(--token-border-contrast-dark);
+
+  --font-heading: var(--primitive-font-gothic);
+  --font-body: var(--primitive-font-gothic);
+
+  --spacing-section-margin: var(--primitive-space-2);
+  --spacing-control: var(--primitive-space-3);
+  --spacing-card: var(--primitive-space-4);
+  --spacing-group: var(--primitive-space-5);
+  --spacing-section: var(--primitive-space-7);
+
+  --radius-input: var(--primitive-radius-small);
+  --radius-card: var(--primitive-radius-medium);
+  --radius-button: var(--primitive-radius-pill);
+
+  --text-small: var(--primitive-font-size-small);
+  --text-body: var(--primitive-font-size-base);
+  --text-lead: var(--primitive-font-size-large);
+  --text-heading-small: var(--primitive-font-size-xl);
+  --text-heading-medium: var(--primitive-font-size-2xl);
+  --text-heading-large: var(--primitive-font-size-3xl);
+}
+
+/* Später hier die --token-* Farbwerte überschreiben. */
+:root[data-theme="dark"] {
+}

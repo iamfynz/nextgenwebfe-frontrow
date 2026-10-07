@@ -33,7 +33,7 @@ Nuxt 4 · Vue 3 · TypeScript · Tailwind CSS v4
 
 ```
 app/                      ← Quellcode (Nuxt-4-Konvention; entspricht /src der Abgabe)
-├── assets/css/main.css   Tailwind-Einstieg (Tokens aus A folgen hier)
+├── assets/css/main.css   Tailwind-Einstieg (tokens werden hier importiert)
 ├── components/
 │   ├── base/             Base/UI-Layer (BaseCard)
 │   ├── features/         Feature-Layer (ab Schritt 2)
@@ -42,6 +42,7 @@ app/                      ← Quellcode (Nuxt-4-Konvention; entspricht /src der 
 ├── layouts/default.vue
 ├── pages/                index (weitere Seiten ab Schritt 2)
 └── types/conference.ts
+tokens/token.css        
 public/data/conference-data.json   geteilter, schreibgeschützter Datensatz
 docs/schritt1/                     Deliverables A–D
 ```
@@ -50,7 +51,7 @@ docs/schritt1/                     Deliverables A–D
 
 | | Dokument |
 |---|---|
-| A | [Branding-Konzept & Design Tokens](docs/schritt1/01-branding-konzept.md) |
+| A | [Branding-Konzept & Design Tokens](docs/schritt1/branding-konzept.md) |
 | B | [ADR Komponenten- & Ordnerstruktur](docs/schritt1/02-architektur-adr.md) |
 | C | [State-Management-Konzept](docs/schritt1/03-state-management-konzept.md) |
 | D | [ADR Projekt-Setup](docs/schritt1/04-technologie-adr.md) |
