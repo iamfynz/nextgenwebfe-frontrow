@@ -118,4 +118,25 @@
 
 /* Später hier die --token-* Farbwerte überschreiben. */
 :root[data-theme="dark"] {
+  --token-background: var(--primitive-color-green-500);
+  --token-background-contrast: var(--primitive-color-cream-500);
+  --token-background-card: var(--primitive-color-green-400);
+  --token-background-footer: var(--primitive-color-green-400);
+  --token-surface: var(--primitive-color-green-300);
+
+  --token-text-primary: var(--primitive-color-cream-500);
+  --token-text-light: var(--primitive-color-green-100);
+  --token-text-contrast-primary: var(--primitive-color-green-500);
+  --token-text-contrast-light: var(--primitive-color-green-300);
+  --token-text-color: var(--primitive-color-lime);
+
+  --token-primary: var(--primitive-color-lime);
+  --token-secondary: var(--primitive-color-blue);
+  --token-tertiary: var(--primitive-color-pink);
+  --token-warning: #FF996B;
+
+  --token-border-light: var(--primitive-color-green-300);
+  --token-border-dark: var(--primitive-color-green-200);
+  --token-border-contrast-light: var(--primitive-color-cream-700);
+  --token-border-contrast-dark: var(--primitive-color-cream-800);
 }
