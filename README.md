@@ -42,7 +42,7 @@ app/                      ← Quellcode (Nuxt-4-Konvention; entspricht /src der 
 ├── layouts/default.vue
 ├── pages/                index (weitere Seiten ab Schritt 2)
 └── types/conference.ts
-tokens/token.css        
+tokens/tokens.css        
 public/data/conference-data.json   geteilter, schreibgeschützter Datensatz
 docs/schritt1/                     Deliverables A–D
 ```
@@ -51,10 +51,16 @@ docs/schritt1/                     Deliverables A–D
 
 | | Dokument |
 |---|---|
-| A | [Branding-Konzept & Design Tokens](docs/schritt1/01-branding-konzept.md) |
+| A | [Branding-Konzept & Design Tokens](docs/schritt1/01-branding-design-tokens.md) |
 | B | [ADR Komponenten- & Ordnerstruktur](docs/schritt1/02-architektur-adr.md) |
 | C | [State-Management-Konzept](docs/schritt1/03-state-management-konzept.md) |
 | D | [ADR Projekt-Setup](docs/schritt1/04-technologie-adr.md) |
+
+## Tooling-Notizen
+
+- TypeScript ist auf 5.x gepinnt, weil `vue-tsc` TypeScript 7 noch nicht unterstützt.
+- Science Gothic wird derzeit über Google Fonts geladen; lokales Hosting wird mit dem Offline-Ziel in Schritt 3 entschieden.
+- Kein Pinia, kein VueUse: Begründung in [ADR D](docs/schritt1/04-technologie-adr.md) und [Konzept C](docs/schritt1/03-state-management-konzept.md).
 
 ## Konventionen
 
