@@ -1,0 +1,25 @@
+Abgabe – Next Generation Web Frontends
+======================================
+
+Lehrveranstaltung:  Next Generation Web Frontends (FH Technikum Wien, LV-Leitung Helmuth Lammer)
+Assignment:         03c Team Assignment – Projektarbeit
+Aktueller Stand:    Schritt 1: Planung & Architekturentscheidungen
+
+Team:               FrontRow
+Teammitglieder:     Markus Vogl     (markusvogl@outlook.at)
+                    Andrea Windisch (andrea.windisch@gmx.net)
+
+Repository:         https://github.com/iamfynz/nextgenwebfe-frontrow
+Branch:             main
+
+Deliverables:       docs/schritt1/01-branding-design-tokens.md   (A)
+                    docs/schritt1/02-architektur-adr.md           (B)
+                    docs/schritt1/03-state-management-konzept.md  (C)
+                    docs/schritt1/04-technologie-adr.md           (D)
+                    tokens/tokens.css
+                    app/                                          (Grundgerüst, entspricht /src)
+                    README.md                                     (Setup: npm install && npm run dev)
+                    AI-LOG.md
+
+Start:              npm install
+                    npm run dev   →  http://localhost:3000
