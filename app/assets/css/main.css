@@ -1,9 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Science+Gothic:wght@100..900&display=swap');
 @import "tailwindcss";
-@import "../../../tokens/token.css";
+@import "../../../tokens/tokens.css";
 
 @layer base {
   body {
-    @apply bg-background text-text-primary;
+    @apply bg-background font-body text-body text-text-primary;
+  }
+  h1, h2, h3 {
+    @apply font-heading;
   }
 }
