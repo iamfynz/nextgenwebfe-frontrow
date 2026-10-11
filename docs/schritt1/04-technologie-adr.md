@@ -1,6 +1,6 @@
 # D — ADR: Projekt-Setup
 
-> Federführung: Person 1 · Status: **Entwurf** (Cross-Review ausständig) · Datum: 2026-10-06
+> Federführung: Person 1 · Datum: 2026-10-06
 > Scope: Setup/Tooling. Rendering-Strategien folgen in Schritt 2.
 
 ## Kontext

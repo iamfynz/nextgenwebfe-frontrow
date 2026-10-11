@@ -1,6 +1,6 @@
 # C — State-Management-Konzept: „Mein Programm" & conference-data.json
 
-> Federführung: Person 2 · Status: **Entwurf** (Cross-Review ausständig)
+> Federführung: Person 2
 > Umsetzungsstand: `useConferenceData()` ist in Schritt 1 implementiert; `useMyProgram()` folgt mit den Seiten in Schritt 2.
 
 ## Zwei Arten von State

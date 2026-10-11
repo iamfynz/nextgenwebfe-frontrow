@@ -1,6 +1,6 @@
 # B — ADR: Komponenten- & Ordnerstruktur
 
-> Federführung: Person 2 · Status: **Entwurf** (Cross-Review ausständig) · Datum: 2026-10-06
+> Federführung: Person 2 · Datum: 2026-10-06
 
 ## Kontext
 
