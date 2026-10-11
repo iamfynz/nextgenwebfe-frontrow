@@ -13,3 +13,25 @@ Für Texte auf hellen Farbflächen gibt es zusätzlich --color-text-on-color. Di
 ### Konsistenz
 Das dritte Kriterium ist Konsistenz. Gemeinsame Skalen verhindern, dass jede Komponente eigene Abstände, Rundungen und Schriftgrößen bekommt. Kleine Spaces sind für Elemente innerhalb einer Gruppe gedacht, größere für Karten und Seitenabschnitte. Die drei Radien unterscheiden Eingabefelder, Karten und Buttons.
 Vorerst beschränken wir uns auf diese grundlegenden Kategorien. Dadurch bleibt das Set für beide Teammitglieder übersichtlich. Weitere Tokens können wir ergänzen, wenn sie bei der Umsetzung tatsächlich gebraucht werden.
+## Kontrastprüfung (WCAG 2.1 AA)
+
+Ergebnis des Cross-Reviews (Markus V., 2026-10-10), Werte mit dem WebAIM Contrast Checker nachgerechnet. Grenzwert: 4,5:1 für Normaltext, 3:1 für Großtext.
+
+| Text / Hintergrund (Light) | Ratio | AA |
+|---|---|---|
+| text-primary / background | 14,95:1 | ✓ |
+| text-primary / background-card | 13,97:1 | ✓ |
+| text-primary / surface (Mint) | 12,70:1 | ✓ |
+| text-primary / primary (Lime) | 12,83:1 | ✓ |
+| text-primary / secondary (Blau) | 6,44:1 | ✓ |
+| text-primary / tertiary (Rosa) | 11,81:1 | ✓ |
+| text-contrast-primary / background-contrast | 14,95:1 | ✓ |
+| text-contrast-light / background-contrast | 11,88:1 | ✓ |
+| text-color (Lime) / background-contrast | 12,83:1 | ✓ |
+| warning / background | 4,75:1 | ✓ |
+| text-light / background | 3,82:1 | nur Großtext |
+| text-light / background-card | 3,57:1 | nur Großtext |
+
+Alle Paare des Dark-Themes liegen über 7:1.
+
+Befund: `text-light` erreicht nur AA für Großtext, wird im Grundgerüst aber für kleine Beschriftungen verwendet. Lime ist als Textfarbe nur auf Dunkelgrün zulässig (auf Creme 1,17:1). Beides wird in Schritt 2 behoben, entweder durch `green-300` (#3D5A59) als `text-light` oder durch Beschränkung auf Großtext.
