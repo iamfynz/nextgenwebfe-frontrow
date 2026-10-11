@@ -6,13 +6,13 @@ defineProps<{ as?: string }>()
 <template>
   <component
     :is="as ?? 'article'"
-    class="rounded-lg  bg-background-card p-4"
+    class="rounded-card bg-background-card p-card"
   >
-    <header v-if="$slots.header" class="mb-3">
+    <header v-if="$slots.header" class="mb-control">
       <slot name="header" />
     </header>
     <slot />
-    <footer v-if="$slots.footer" class="mt-4 flex items-center justify-between gap-3">
+    <footer v-if="$slots.footer" class="mt-card flex items-center justify-between gap-control">
       <slot name="footer" />
     </footer>
   </component>
