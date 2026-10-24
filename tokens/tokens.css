@@ -96,7 +96,7 @@
   --color-border-contrast-dark: var(--token-border-contrast-dark);
 
   --font-heading: var(--primitive-font-gothic);
-  --font-body: var(--primitive-font-gothic);
+  --font-body: var(--primitive-font-sans);
 
   --spacing-section-margin: var(--primitive-space-2);
   --spacing-control: var(--primitive-space-3);
