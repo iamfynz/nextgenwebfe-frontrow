@@ -9,7 +9,6 @@ defineProps<{
 
 <template>
   <header class="overflow-hidden rounded-card bg-background-contrast text-text-contrast-primary">
-    <div class="h-2 bg-primary" />
     <div class="px-card py-group md:px-group md:py-section">
       <div class="flex flex-wrap items-center gap-section-margin text-small font-bold uppercase tracking-wide">
         <span class="rounded-button bg-primary px-control py-1 text-text-primary">

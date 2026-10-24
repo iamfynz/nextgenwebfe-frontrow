@@ -16,7 +16,7 @@ defineProps<{
     </h2>
 
     <dl class="mt-control grid gap-control sm:grid-cols-2 lg:grid-cols-3">
-      <BaseCard v-for="item in items" :key="item.label" as="div" class="border border-border-light">
+      <BaseCard v-for="item in items" :key="item.label" as="div">
         <dt class="text-small font-bold uppercase tracking-wide text-text-light">
           {{ item.label }}
         </dt>

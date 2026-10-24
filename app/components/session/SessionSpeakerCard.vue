@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <BaseCard class="border border-border-light">
+  <BaseCard>
     <div class="flex flex-col gap-card sm:flex-row sm:items-center sm:justify-between">
       <div>
         <p class="text-lead font-bold text-text-primary">
