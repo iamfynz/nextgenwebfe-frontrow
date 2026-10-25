@@ -39,15 +39,15 @@ useSeoMeta({
 <template>
   <article v-if="session" class="space-y-section">
     <NuxtLink
-      to="/"
+      to="/programm"
       class="inline-flex items-center gap-section-margin font-bold text-text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-border-dark"
     >
       <span aria-hidden="true">←</span> Alle Sessions
     </NuxtLink>
 
-    <SessionHero :session="session" :track-name="session.track?.name" />
+    <SessionDetailHero :session="session" :track-name="session.track?.name" />
 
-    <SessionMetaGrid :items="metaItems" />
+    <SessionDetailGrid :items="metaItems" />
 
     <section aria-labelledby="session-speakers-heading">
       <div class="mb-control flex items-end justify-between gap-control">
@@ -65,7 +65,7 @@ useSeoMeta({
       </div>
 
       <div class="grid gap-control md:grid-cols-2">
-        <SessionSpeakerCard
+        <SessionDetailSpeakerCard
           v-for="speaker in session.speakers"
           :key="speaker.id"
           :speaker="speaker"
