@@ -1,10 +1,4 @@
-import type { Room, Session, Speaker, Track } from '~/types/conference'
-
-export interface SessionDetails extends Session {
-  track?: Track
-  room?: Room
-  speakers: Speaker[]
-}
+import type { SessionDetails } from '~/types/conference'
 
 /**
  * Domänenschicht für Sessions.

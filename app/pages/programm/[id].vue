@@ -39,7 +39,7 @@ useSeoMeta({
 <template>
   <article v-if="session" class="space-y-section">
     <NuxtLink
-      to="/sessions"
+      to="/"
       class="inline-flex items-center gap-section-margin font-bold text-text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-border-dark"
     >
       <span aria-hidden="true">←</span> Alle Sessions
@@ -56,7 +56,7 @@ useSeoMeta({
             Auf der Bühne
           </p>
           <h2 id="session-speakers-heading" class="mt-section-margin text-heading-small font-bold">
-            {{ session.speakers.length === 1 ? 'Speaker' : 'Speaker:innen' }}
+            {{ session.speakers.length === 1 ? 'Speaker:in' : 'Speaker:innen' }}
           </h2>
         </div>
         <span class="rounded-button bg-surface px-control py-section-margin text-small font-bold">
