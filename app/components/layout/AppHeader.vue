@@ -5,11 +5,11 @@
         <span class="text-primary" aria-hidden="true">OO</span>FrontRow
       </NuxtLink>
       <nav class="text-small text-text-light flex gap-3">
-        <NuxtLink to="/">
+        <NuxtLink to="/programm">
           Programm
         </NuxtLink>
         <span>·</span>
-        <NuxtLink to="/merkliste">
+        <NuxtLink to="/">
           Meine Merkliste
         </NuxtLink>
       </nav>
