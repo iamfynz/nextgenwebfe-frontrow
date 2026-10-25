@@ -98,7 +98,7 @@
   --font-heading: var(--primitive-font-gothic);
   --font-body: var(--primitive-font-sans);
 
-  --spacing-section-margin: var(--primitive-space-2);
+  --spacing-section-margin: var(--primitive-space-1);
   --spacing-control: var(--primitive-space-3);
   --spacing-card: var(--primitive-space-4);
   --spacing-group: var(--primitive-space-5);

@@ -52,3 +52,15 @@ export interface ConferenceData {
   speakers: Speaker[]
   sessions: Session[]
 }
+
+/** Für die Darstellung fertig aufgelöste Session. */
+export interface SessionDetails extends Session {
+  track?: Track
+  room?: Room
+  speakers: Speaker[]
+}
+
+/** Für die Darstellung fertig aufgelöstes Speaker-Profil. */
+export interface SpeakerDetails extends Speaker {
+  sessions: Session[]
+}
