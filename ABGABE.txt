@@ -2,8 +2,8 @@ Abgabe – Next Generation Web Frontends
 ======================================
 
 Lehrveranstaltung:  Next Generation Web Frontends (FH Technikum Wien, LV-Leitung Helmuth Lammer)
-Assignment:         03c Team Assignment – Projektarbeit
-Aktueller Stand:    Schritt 1: Planung & Architekturentscheidungen
+Assignment:         04c Team Assignment – Projektarbeit
+Aktueller Stand:    Schritt 2: Rendering-Strategie & Kernfunktionen
 
 Team:               FrontRow
 Teammitglieder:     Markus Vogl     (markusvogl@outlook.at)
@@ -12,14 +12,18 @@ Teammitglieder:     Markus Vogl     (markusvogl@outlook.at)
 Repository:         https://github.com/iamfynz/nextgenwebfe-frontrow
 Branch:             main
 
-Deliverables:       docs/schritt1/01-branding-design-tokens.md   (A)
-                    docs/schritt1/02-architektur-adr.md           (B)
-                    docs/schritt1/03-state-management-konzept.md  (C)
-                    docs/schritt1/04-technologie-adr.md           (D)
-                    tokens/tokens.css
-                    app/                                          (Grundgerüst, entspricht /src)
-                    README.md                                     (Setup: npm install && npm run dev)
-                    AI-LOG.md
+Deliverables:       docs/schritt2/01-rendering-strategie-adr.md   (A)
+                    docs/schritt2/AI-LOG-Windisch.md             (F)
+                    docs/schritt2/AI-LOG-Vogl.md                 (F)
+                    app/                                         (B–E, entspricht /src)
+                      pages/programm/            Übersicht + Filter (B), Detailseiten (C)
+                      pages/speakers/            Speaker-Profile (D)
+                      pages/mein-programm.vue    Mein Programm (E)
+                    server/api/conference-data.get.ts            (SSR-Simulation, ADR-Nachtrag)
+                    README.md                                    (Setup, Rendering pro Route)
+
+Schritt 1:          docs/schritt1/ (A–D), tokens/tokens.css, AI-LOG.md
 
 Start:              npm install
                     npm run dev   →  http://localhost:3000
+                    Production:  npm run build && node .output/server/index.mjs  (aus dem Projektroot)

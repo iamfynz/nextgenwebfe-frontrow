@@ -2,6 +2,7 @@
 
 > Federführung: Person 2
 > Umsetzungsstand: `useConferenceData()` ist in Schritt 1 implementiert; `useMyProgram()` folgt mit den Seiten in Schritt 2.
+> Nachtrag Schritt 2: Der Datensatz wird nicht mehr beim Build importiert, sondern serverseitig bei jedem Request gelesen (`/api/conference-data`). Begründung und Konsequenzen im [Nachtrag der Rendering-ADR](../schritt2/01-rendering-strategie-adr.md#nachtrag-zur-umsetzung); die Aussage „ändert sich nur per Deployment“ ist damit präzisiert.
 
 ## Zwei Arten von State
 
