@@ -15,7 +15,11 @@ const formatters: Record<DayStyle, Intl.DateTimeFormat> = {
   long: new Intl.DateTimeFormat('de-AT', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', timeZone: TIME_ZONE }),
 }
 
-/** Formatiert einen ISO-Tag (YYYY-MM-DD) für die Anzeige. */
+/**
+ * Formatiert einen ISO-Tag (YYYY-MM-DD) für die Anzeige.
+ * 12:00 UTC als fester Zeitpunkt: liegt in Europe/Vienna immer auf demselben Kalendertag,
+ * unabhängig von der Zeitzone des Servers oder des Browsers (sonst Hydration-Mismatch).
+ */
 export function formatDay(isoDay: string, style: DayStyle = 'short') {
-  return formatters[style].format(new Date(`${isoDay}T12:00:00`))
+  return formatters[style].format(new Date(`${isoDay}T12:00:00Z`))
 }
