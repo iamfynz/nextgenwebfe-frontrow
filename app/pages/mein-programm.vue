@@ -50,9 +50,9 @@ useSeoMeta({
         Im Programm kannst du Sessions mit „Merken" hier ablegen.
       </p>
       <div class="mt-card flex justify-center">
-        <BaseLinkButton to="/programm">
+        <BaseButton to="/programm">
           Zum Programm <span aria-hidden="true">→</span>
-        </BaseLinkButton>
+        </BaseButton>
       </div>
     </BaseCard>
 

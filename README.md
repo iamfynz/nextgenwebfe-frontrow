@@ -54,7 +54,7 @@ Nuxt 4 · Vue 3 · TypeScript · Tailwind CSS v4
 app/                      ← Quellcode (Nuxt-4-Konvention; entspricht /src der Abgabe)
 ├── assets/css/main.css   Tailwind-Einstieg (tokens werden hier importiert)
 ├── components/
-│   ├── base/             Base/UI-Layer: BaseCard, BaseButton, BaseButtonVisual, BaseLinkButton
+│   ├── base/             Base/UI-Layer: BaseCard, BaseButton (button oder NuxtLink via `to`)
 │   ├── layout/           AppHeader (Navigation + Zähler), AppFooter
 │   ├── program/          ProgramToggle (Merken / Gemerkt)
 │   ├── session/          SessionCard, SessionList, SessionFilter, SessionDetail*
