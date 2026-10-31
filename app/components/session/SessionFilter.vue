@@ -15,15 +15,6 @@ const emit = defineEmits<{
 const trackId = defineModel<string | null>('trackId', { required: true })
 const day = defineModel<string | null>('day', { required: true })
 const level = defineModel<SessionLevel | null>('level', { required: true })
-
-function formatDay(value: string) {
-  return new Intl.DateTimeFormat('de-AT', {
-    weekday: 'long',
-    day: '2-digit',
-    month: '2-digit',
-    timeZone: 'Europe/Vienna',
-  }).format(new Date(`${value}T12:00:00`))
-}
 </script>
 
 <template>
@@ -58,7 +49,7 @@ function formatDay(value: string) {
           >
             <option :value="null">Alle Tage</option>
             <option v-for="availableDay in days" :key="availableDay" :value="availableDay">
-              {{ formatDay(availableDay) }}
+              {{ formatDay(availableDay, 'medium') }}
             </option>
           </select>
         </label>

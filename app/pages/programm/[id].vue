@@ -11,15 +11,7 @@ if (!session.value) {
   })
 }
 
-const formattedDay = computed(() =>
-  new Intl.DateTimeFormat('de-AT', {
-    weekday: 'long',
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'Europe/Vienna',
-  }).format(new Date(`${session.value!.day}T12:00:00`)),
-)
+const formattedDay = computed(() => formatDay(session.value!.day, 'long'))
 
 const metaItems = computed(() => [
   { label: 'Datum', value: formattedDay.value },
