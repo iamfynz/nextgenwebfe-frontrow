@@ -40,9 +40,9 @@ defineProps<{
               </p>
             </div>
 
-            <BaseLinkButton :to="`/programm/${session.id}`">
+            <BaseButton :to="`/programm/${session.id}`">
               Zur Session <span aria-hidden="true">→</span>
-            </BaseLinkButton>
+            </BaseButton>
           </div>
         </BaseCard>
       </li>

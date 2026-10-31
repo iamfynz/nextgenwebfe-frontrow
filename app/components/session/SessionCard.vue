@@ -57,9 +57,9 @@ const formattedDay = computed(() =>
     </div>
 
     <template #footer>
-      <BaseLinkButton :to="`/programm/${session.id}`" variant="secondary">
+      <BaseButton :to="`/programm/${session.id}`" variant="secondary">
         Details ansehen <span aria-hidden="true">→</span>
-      </BaseLinkButton>
+      </BaseButton>
       <ProgramToggle :session-id="session.id" />
     </template>
   </BaseCard>

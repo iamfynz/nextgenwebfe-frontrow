@@ -21,9 +21,9 @@ defineProps<{
     </div>
 
     <template #footer>
-      <BaseLinkButton :to="`/speakers/${speaker.id}`" variant="secondary">
+      <BaseButton :to="`/speakers/${speaker.id}`" variant="secondary">
         Profil ansehen <span aria-hidden="true">→</span>
-      </BaseLinkButton>
+      </BaseButton>
     </template>
   </BaseCard>
 </template>
