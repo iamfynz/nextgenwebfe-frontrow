@@ -4,10 +4,13 @@
  * Inhalt, der zur Laufzeit aktuell sein soll.
  */
 const { speakers } = await useSpeakers()
+const { conference } = await useConferenceData()
 
 const sortedSpeakers = computed(() =>
   [...speakers.value].sort((a, b) => a.name.localeCompare(b.name, 'de')),
 )
+
+const dayCount = computed(() => conference.value?.dates.length ?? 0)
 
 useSeoMeta({
   title: 'Speaker · FrontRow',
@@ -23,7 +26,7 @@ useSeoMeta({
       </p>
       <h1 class="mt-section-margin text-heading-large font-bold">Speaker</h1>
       <p class="mt-control max-w-2xl text-lead leading-relaxed text-text-contrast-light">
-        {{ sortedSpeakers.length }} Speaker:innen an zwei Tagen. Jedes Profil verlinkt die gehaltenen Sessions.
+        {{ sortedSpeakers.length }} Speaker:innen an {{ dayCount }} {{ dayCount === 1 ? 'Tag' : 'Tagen' }}. Jedes Profil verlinkt die gehaltenen Sessions.
       </p>
     </section>
 

@@ -27,8 +27,7 @@ const links = [
           <span
             v-if="link.to === '/mein-programm' && isHydrated && count > 0"
             class="rounded-button bg-primary px-section-margin text-text-primary tabular-nums"
-            :aria-label="`${count} gemerkte Sessions`"
-          >{{ count }}</span>
+          >{{ count }}<span class="sr-only"> gemerkte Sessions</span></span>
         </NuxtLink>
       </nav>
     </div>
