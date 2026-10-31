@@ -60,9 +60,7 @@ const formattedDay = computed(() =>
       <BaseLinkButton :to="`/programm/${session.id}`" variant="secondary">
         Details ansehen <span aria-hidden="true">→</span>
       </BaseLinkButton>
-      <BaseButton :to="`/programm/${session.id}`">
-        Merken
-      </BaseButton>
+      <ProgramToggle :session-id="session.id" />
     </template>
   </BaseCard>
 </template>
