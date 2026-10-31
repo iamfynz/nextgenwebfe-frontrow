@@ -47,6 +47,14 @@ useSeoMeta({
 
     <SessionDetailHero :session="session" :track-name="session.track?.name" />
 
+    <div class="flex flex-wrap items-center gap-control">
+      <ProgramToggle :session-id="session.id" />
+      <p class="text-small text-text-light">
+        Gemerkte Sessions findest du unter
+        <NuxtLink to="/mein-programm" class="font-bold underline underline-offset-4">Mein Programm</NuxtLink>.
+      </p>
+    </div>
+
     <SessionDetailGrid :items="metaItems" />
 
     <section aria-labelledby="session-speakers-heading">
