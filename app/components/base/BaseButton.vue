@@ -2,13 +2,14 @@
 /**
  * Base-Layer: der eine Button der App.
  * - Ohne `to`: natives <button>, emittiert `click` (MouseEvent). `disabled` wirkt nativ.
- * - Mit `to`: NuxtLink in Button-Optik. `type` ist hier ohne Bedeutung; `disabled` wird als
- *   `aria-disabled` gesetzt, die Navigation unterbunden und kein `click` emittiert.
+ * - Mit `to`: NuxtLink in Button-Optik; `type` ist hier ohne Bedeutung.
+ * - Mit `to` und `disabled`: wird als deaktivierter <button> gerendert. Ein NuxtLink lässt sich
+ *   nicht zuverlässig stilllegen (RouterLink navigiert, bevor ein äußerer Handler eingreift).
  * Inhalt kommt ausschließlich über den Default-Slot. Icons als eigene Kinder
  * (z. B. <span aria-hidden="true">→</span>) bekommen über `gap` ihren Abstand.
  * Weitere Attribute (aria-*, class) fallen auf das gerenderte Root-Element durch.
  */
-const props = withDefaults(
+withDefaults(
   defineProps<{
     to?: string
     type?: 'button' | 'submit' | 'reset'
@@ -27,18 +28,10 @@ const emit = defineEmits<{
   click: [event: MouseEvent]
 }>()
 
-function onClick(event: MouseEvent) {
-  if (props.disabled) {
-    event.preventDefault()
-    return
-  }
-  emit('click', event)
-}
-
 const baseClass
   = 'inline-flex items-center justify-center gap-2 rounded-button border px-5 py-3 text-small font-bold leading-4 transition '
     + 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-border-dark '
-    + 'disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50'
+    + 'disabled:cursor-not-allowed disabled:opacity-50'
 
 const variantClass = {
   primary: 'border-transparent bg-primary text-text-primary hover:brightness-90 hover:text-text-primary focus:text-text-primary active:text-text-primary visited:text-text-primary',
@@ -48,12 +41,9 @@ const variantClass = {
 
 <template>
   <NuxtLink
-    v-if="to"
+    v-if="to && !disabled"
     :to="to"
     :class="[baseClass, variantClass[variant]]"
-    :aria-disabled="disabled || undefined"
-    :tabindex="disabled ? -1 : undefined"
-    @click="onClick"
   >
     <slot />
   </NuxtLink>
@@ -63,7 +53,7 @@ const variantClass = {
     :type="type"
     :disabled="disabled"
     :class="[baseClass, variantClass[variant]]"
-    @click="onClick"
+    @click="emit('click', $event)"
   >
     <slot />
   </button>

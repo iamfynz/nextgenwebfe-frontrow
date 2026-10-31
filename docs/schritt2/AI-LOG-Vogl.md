@@ -50,3 +50,9 @@ Live mitgeschrieben während der Arbeit. Tool durchgehend: Claude Code (Modell F
 - **Tool:** Claude Code
 - **Prompt im Wortlaut:** „Fixen wir mal die must-haves vor der Abgabe also den reuse der Formatierung aber fass mir die Aenderungen bitte in einen extra Branch zusammen damit ich sie Andrea als Feedback schicken kann. Bitte bessern wir im gleichen Zug auch noch die Changes aus, wo die ADRs von der aktuell implementierten Architektur abweichen. Die sollen immer aktuell gehalten werden."
 - **Zweck:** Must-haves auf eigenem Branch `fix/review-formatierung-adr`, getrennt in Code- und Doku-Commit, damit Andrea das Feedback als Diff lesen kann. Regel für das Team festgehalten: ADRs werden in-place auf den Ist-Stand gebracht (mit Aktualisierungsdatum), nicht nur per Nachtrag ergänzt.
+
+### Eintrag 8
+
+- **Tool:** Claude Code
+- **Prompt im Wortlaut:** „Bitte teste jetzt nocheinmal gegen die Angabe und mache noch ein finales Code Review" und danach „Lass uns die 5 Punkte noch fixen - koennen wir danach als Uebergabe an Andrea ein Github Issue im Repo anlegen mit dem Feedback Branch inkl. den Themen die bei ihr noch gefixt gehoeren?"
+- **Zweck:** Abschließende Prüfung: alle 20 Detail- und 18 Speaker-Seiten per Skript gegen den Datensatz, CSR/SSR pro Route gegen die ADR, ADR-Schema und Wortzahlen, AI-LOG-Felder. Finales Code-Review brachte fünf Punkte, die noch gefixt wurden: deaktivierter Link-Button navigierte trotzdem (RouterLink navigiert vor dem äußeren Handler, jetzt wird ein deaktivierter `<button>` gerendert), Zeitzonen-Falle in `formatDay` (fester UTC-Zeitpunkt), `aria-label` auf dem Toggle überschrieb den sichtbaren Text, doppelte IDs aus `localStorage`, toter Link auf `AI-LOG-Windisch.md`. Übergabe an Andrea als GitHub-Issue mit Feedback-Branch und ihrer Restliste.

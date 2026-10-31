@@ -30,7 +30,8 @@ export function useMyProgram() {
       const raw = localStorage.getItem(STORAGE_KEY)
       const parsed: unknown = raw ? JSON.parse(raw) : []
       if (Array.isArray(parsed)) {
-        sessionIds.value = parsed.filter((id): id is string => typeof id === 'string')
+        // Nur Strings, ohne Duplikate (hand-editierter oder älterer Storage-Inhalt).
+        sessionIds.value = [...new Set(parsed.filter((id): id is string => typeof id === 'string'))]
       }
     }
     catch {
