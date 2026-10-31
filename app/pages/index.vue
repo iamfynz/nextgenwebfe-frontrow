@@ -5,7 +5,7 @@
  */
 const { conference, sessions, speakers, tracks, rooms } = await useConferenceData()
 
-const stats = computed(() => [
+const statItems = computed(() => [
   { label: 'Sessions', value: sessions.value.length },
   { label: 'Speaker', value: speakers.value.length },
   { label: 'Tracks', value: tracks.value.length },
@@ -32,7 +32,7 @@ const stats = computed(() => [
         Datensatz geladen (conference-data.json)
       </h2>
       <dl class="mt-control grid grid-cols-2 gap-control md:grid-cols-4">
-        <BaseCard v-for="s in stats" :key="s.label" as="div">
+        <BaseCard v-for="s in statItems" :key="s.label" as="div">
           <dt class="text-small text-text-light">{{ s.label }}</dt>
           <dd class="mt-section-margin text-heading-medium font-bold text-text-primary tabular-nums">{{ s.value }}</dd>
         </BaseCard>

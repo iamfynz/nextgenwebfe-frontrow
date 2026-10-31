@@ -4,12 +4,12 @@
       <NuxtLink to="/" class="flex items-center gap-section-margin font-heading text-lead font-bold text-text-primary">
         <span class="text-primary" aria-hidden="true">OO</span>FrontRow
       </NuxtLink>
-      <nav class="text-small text-text-light">
-        <NuxtLink to="/">
+      <nav class="text-small text-text-light flex gap-3">
+        <NuxtLink to="/programm">
           Programm
         </NuxtLink>
-        ·
-        <NuxtLink to="/merkliste">
+        <span>·</span>
+        <NuxtLink to="/">
           Meine Merkliste
         </NuxtLink>
       </nav>

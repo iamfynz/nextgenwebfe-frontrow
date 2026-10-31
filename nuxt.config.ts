@@ -5,6 +5,10 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
+  routeRules: {
+    '/programm': { ssr: false },
+  },
+
   // Eine zentrale CSS-Einstiegsdatei; sie importiert tokens/tokens.css + Tailwind.
   css: ['~/assets/css/main.css'],
 
