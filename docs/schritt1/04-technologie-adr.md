@@ -5,7 +5,7 @@
 
 ## Kontext
 
-Drei Seitentypen: Übersichten mit Filter, Detailseiten mit dynamischen Parametern (`/sessions/:id`) und ein personalisiertes Dashboard. Kein Backend, Daten aus einer statischen JSON-Datei. Folgesprints bringen weitere Anforderungen pro Seitentyp (Schritt 2) und PWA/Offline (Schritt 3). Das Team (2 Personen) kennt Vite + Vue 3 + TypeScript + Tailwind aus den Hausübungen, aber weder Nuxt noch Vue Router.
+Drei Seitentypen: Übersichten mit Filter, Detailseiten mit dynamischen Parametern (`/programm/:id`, `/speakers/:id`) und ein personalisiertes Dashboard. Kein Backend, Daten aus einer statischen JSON-Datei. Folgesprints bringen weitere Anforderungen pro Seitentyp (Schritt 2) und PWA/Offline (Schritt 3). Das Team (2 Personen) kennt Vite + Vue 3 + TypeScript + Tailwind aus den Hausübungen, aber weder Nuxt noch Vue Router.
 
 Kriterien: Routing-Bedarf, Team-Erfahrung, spätere Anforderungen, Einarbeitungsaufwand.
 
@@ -16,7 +16,7 @@ Kriterien: Routing-Bedarf, Team-Erfahrung, spätere Anforderungen, Einarbeitungs
 − Routing, Layouts, `<head>`-Management und geteiltes Daten-Fetching müssen selbst verdrahtet werden. Wächst der Bedarf in Schritt 2 über reines Client-Rendering hinaus, wäre ein zweites Setup (z. B. vite-ssg) nötig — Migrationsaufwand.
 
 **Option 2 — Nuxt 4**
-+ Dateibasiertes Routing deckt alle drei Seitentypen ab (`pages/sessions/[id].vue`), Layouts inklusive.
++ Dateibasiertes Routing deckt alle drei Seitentypen ab (`pages/programm/[id].vue`), Layouts inklusive.
 + `useAsyncData`/`useState` lösen Daten-Deduplizierung und geteilten State ohne Zusatzbibliothek.
 + Die Rendering-Entscheidung von Schritt 2 bleibt offen: Nuxt erlaubt sie später pro Route, ohne Setup-Wechsel.
 + Module für Schritt 3 vorhanden (`@vite-pwa/nuxt`).

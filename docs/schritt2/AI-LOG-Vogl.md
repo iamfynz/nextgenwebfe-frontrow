@@ -38,3 +38,15 @@ Live mitgeschrieben während der Arbeit. Tool durchgehend: Claude Code (Modell F
 - **Zweck:** Die dreiteilige Button-Abstraktion (BaseButton → BaseButtonVisual, BaseLinkButton → BaseButtonVisual) aus dem Cross-Review auf eine Base-Komponente reduzieren: ein `BaseButton`, der mit `to` als NuxtLink und sonst als `<button>` rendert, nur Default-Slot statt Slot plus `label`-Prop, Emit `click` mit MouseEvent statt `handleClick`, Abstand zwischen Label und Icon über `gap`.
 - **Übernommen / geprüft:** Zwei Dateien gelöscht, sechs Verwendungen umgestellt, Typecheck und Build grün, gerendertes HTML auf Detail- und Speaker-Seite geprüft (Attribut-Fallthrough für `aria-pressed`, `disabled`, `class` bleibt erhalten).
 - **Geändert / verstanden:** Das alte Konstrukt funktionierte nur, weil ein nicht deklariertes `@click` als Attribut über zwei Komponenten bis zum nativen Button durchfiel. Ein deklarierter Emit macht den Vertrag der Base-Komponente typisierbar und nimmt die Abhängigkeit vom Fallthrough.
+
+### Eintrag 6
+
+- **Tool:** Claude Code
+- **Prompt im Wortlaut:** „Bitte mach ein Review von unsreren lokalen Changes & challange die Changes gegen die Angabe"
+- **Zweck:** Zweite Review-Runde über meinen eigenen Branch, diesmal mit dem eingebauten Code-Review-Agenten als unabhängiger Leser plus Abgleich gegen Angabe und Schritt-1-Dokumente. Ergebnis: vier Must-haves (dreifache Datumsformatierung neben `formatDay`, hart kodiertes „an zwei Tagen", `aria-label` auf `<span>`, `BaseButton` mit `to` ignoriert `disabled`), dazu ADR B und Konzept C, die noch den Planungsstand beschreiben (`components/features/`, `/sessions`, Build-Import, `<ClientOnly>`).
+
+### Eintrag 7
+
+- **Tool:** Claude Code
+- **Prompt im Wortlaut:** „Fixen wir mal die must-haves vor der Abgabe also den reuse der Formatierung aber fass mir die Aenderungen bitte in einen extra Branch zusammen damit ich sie Andrea als Feedback schicken kann. Bitte bessern wir im gleichen Zug auch noch die Changes aus, wo die ADRs von der aktuell implementierten Architektur abweichen. Die sollen immer aktuell gehalten werden."
+- **Zweck:** Must-haves auf eigenem Branch `fix/review-formatierung-adr`, getrennt in Code- und Doku-Commit, damit Andrea das Feedback als Diff lesen kann. Regel für das Team festgehalten: ADRs werden in-place auf den Ist-Stand gebracht (mit Aktualisierungsdatum), nicht nur per Nachtrag ergänzt.
