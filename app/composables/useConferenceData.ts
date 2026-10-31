@@ -1,18 +1,17 @@
 import type { ConferenceData, Session, Speaker } from '~/types/conference'
 
-const DATA_URL = '/data/conference-data.json'
+const DATA_URL = '/api/conference-data'
 const ASYNC_KEY = 'conference-data'
 
 /**
- * Einzige Stelle, die weiß, WOHER die Daten kommen (hier austauschbar: GitHub-Raw-URL, Nitro-Route …).
- * Server/Prerender: direkter Import der Datei (ein relativer $fetch landet in Dev beim Vue-Router statt
- * beim statischen Asset). Client: HTTP-Fetch desselben Assets aus /public — später vom Service Worker cachebar.
+ * Einzige Stelle, die weiß, WOHER die Daten kommen.
+ * Seit Schritt 2: Server und Client holen den Datensatz von der Nitro-Route /api/conference-data,
+ * die public/data/conference-data.json bei jedem Request liest (Simulation einer veränderlichen
+ * Datenquelle, siehe docs/schritt2/01-rendering-strategie-adr.md, Nachtrag). Während SSR beantwortet
+ * Nitro den $fetch intern ohne HTTP-Roundtrip; im Browser ist es ein normaler Request, den in
+ * Schritt 3 der Service Worker cachen kann.
  */
 async function loadConferenceData(): Promise<ConferenceData> {
-  if (import.meta.server) {
-    const mod = await import('~~/public/data/conference-data.json')
-    return mod.default as ConferenceData
-  }
   return $fetch<ConferenceData>(DATA_URL)
 }
 
@@ -23,11 +22,11 @@ async function loadConferenceData(): Promise<ConferenceData> {
  * - `useAsyncData` mit festem Key: Nuxt dedupliziert parallele Aufrufe aus mehreren
  *   Komponenten, überträgt das Ergebnis vom Server in den Client-Payload (kein Doppel-Fetch)
  *   und cached es bei Client-Navigation.
- * - Muss in `<script setup>` mit `await` aufgerufen werden, damit SSR/SSG die Daten
- *   bereits im HTML rendern.
+ * - Muss in `<script setup>` mit `await` aufgerufen werden, damit SSR die Daten
+ *   bereits im HTML rendern kann.
  * - Datenschicht: laden, indizieren, joinen. Domänenlogik (Sortierung, Gruppierung, Filter)
- *   gehört in Domänen-Composables, die hierauf aufbauen (ab Schritt 2: useSessionFilter, useMyProgram, …).
- *   Nur diese Datei ruft useAsyncData für den Datensatz auf.
+ *   gehört in die Domänen-Composables, die hierauf aufbauen (useSessions, useSpeakers,
+ *   useSessionFilter, useMyProgram). Nur diese Datei ruft useAsyncData für den Datensatz auf.
  */
 export async function useConferenceData() {
   const { data, status, error, refresh } = await useAsyncData<ConferenceData>(ASYNC_KEY, loadConferenceData)

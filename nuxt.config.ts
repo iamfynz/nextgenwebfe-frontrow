@@ -5,8 +5,19 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
+  // Rendering-Strategie pro Anwendungsteil: docs/schritt2/01-rendering-strategie-adr.md
+  // Alles ohne Regel ist SSR (Session-Detail, Speaker-Übersicht, Speaker-Profil, Startseite).
   routeRules: {
-    '/programm': { ssr: false },
+    '/programm': { ssr: false }, // B: Übersicht mit Filtern → CSR
+    '/mein-programm': { ssr: false }, // E: personalisiert, nur localStorage → CSR
+  },
+
+  nitro: {
+    // Datensatz wird bei jedem Request von der Platte gelesen (SSR-Simulation, ADR-Nachtrag).
+    // Pfad relativ zum Arbeitsverzeichnis des Server-Prozesses → Server aus dem Projektroot starten.
+    storage: {
+      data: { driver: 'fs', base: './public/data' },
+    },
   },
 
   // Eine zentrale CSS-Einstiegsdatei; sie importiert tokens/tokens.css + Tailwind.
