@@ -117,3 +117,11 @@
 - **Tool:** Codex (OpenAI)
 - **Prompt im Wortlaut:** „Jetzt erstelle mir aus diesem chat verlauf bitte ein AI log mit den ganzen anweiungen, im altbekannten stil“
 - **Zweck:** Den Einsatz des AI-Tools für Schritt 2 transparent, chronologisch und gemäß Abgabeformat dokumentieren.
+
+## 2026-11-01
+
+### Eintrag 20
+
+- **Tool:** Codex (OpenAI)
+- **Prompt im Wortlaut:** „Bitte erfülle alle noch offenen Aufgaben und pass alles an! Inter als Font bleibt, ggf ein adr hinzufügen oder ändern“ (mit dem vollständigen Cross-Review-Kontext zu ADR-Wortlimits, CSR-Abwägung, AI-LOG, Branding-Dokumentation und Klick-Test)
+- **Zweck:** Die offenen Punkte aus dem Cross-Review umsetzen, die Dokumentation an den Ist-Stand anpassen und die Persistenz von Speaker- und Programmseiten im Browser prüfen.

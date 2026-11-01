@@ -14,15 +14,15 @@ Die Übersicht zeigt alle Sessions und bietet kombinierbare Filter nach Track, K
 
 ### Optionen
 
-Bei **CSR** werden Daten und Filterlogik im Browser verarbeitet. **SSR** könnte die erste Übersicht am Server erzeugen, für die anschließende Filterung wäre jedoch weiterhin clientseitiges JavaScript notwendig. **SSG** würde eine schnelle statische Seite liefern, aber Änderungen erst nach einem neuen Build anzeigen.
+Bei **CSR** werden Daten und Filterlogik im Browser verarbeitet. Das hält die Implementierung einfach, liefert aber zunächst nur die App-Hülle. Ohne JavaScript sind die 20 Sessions nicht sichtbar; außerdem entstehen ein zusätzlicher Daten-Request und ein späterer vollständiger Inhalt. **SSR** könnte alle Sessions bereits im ersten HTML ausliefern. Das verbessert Erstdarstellung, Suchmaschinenlesbarkeit und Nutzung ohne JavaScript; Nuxt würde die Daten jedoch zusätzlich als Payload übertragen und die Seite für die Filterung trotzdem hydratisieren. **SSG** hätte ähnliche Vorteile bei geringer Serverlast, würde Programmänderungen aber erst nach einem neuen Build zeigen. **ISR** begrenzt diese Verzögerung, beseitigt sie jedoch nicht.
 
 ### Entscheidung
 
-Die Session-Übersicht wird mit **CSR** umgesetzt. Der wichtigste Teil dieser Seite ist die direkte Interaktion mit den Filtern. Der Filterzustand ist nur für die aktuelle Nutzung relevant und muss nicht serverseitig gespeichert werden.
+Die Session-Übersicht wird mit **CSR** umgesetzt, als bewusste Abweichung von der naheliegenden SSR-Zuordnung für öffentlich lesbare Programminhalte. Bei nur 20 Sessions akzeptieren wir die Nachteile bei First Paint, SEO und Nutzung ohne JavaScript. Ausschlaggebend sind die einfachere Daten- und Filterpipeline sowie der Verzicht auf SSR-Ausgabe, Payload und anschließende Hydration desselben Datensatzes. Der Filterzustand bleibt rein clientseitig. Sollte Auffindbarkeit oder JavaScript-freie Nutzung wichtiger werden, ist SSR die bevorzugte Umstellung.
 
 ### Konsequenzen
 
-Die Filter reagieren ohne Neuladen oder zusätzliche Serveranfrage. Aktuelle Daten können zur Laufzeit geladen werden. Dafür benötigt die Seite JavaScript und der vollständige Inhalt wird erst nach dem Laden der Daten im Browser dargestellt.
+Die Filter reagieren ohne Neuladen oder zusätzliche Serveranfrage, und aktuelle Daten werden bei jedem Einstieg geladen. Dafür benötigt die Seite JavaScript; Sessions erscheinen später als bei SSR und stehen Suchmaschinen nicht im initialen HTML zur Verfügung.
 
 ## C — Session-Detailseiten
 
@@ -34,15 +34,15 @@ Die Detailseiten zeigen Titel, Abstract, Zeit, Raum, Track, Level, Format und Sp
 
 ### Optionen
 
-Mit **SSR** wird die Seite bei jedem Aufruf aus dem aktuellen Datenstand erzeugt. **SSG** würde die Detailseiten beim Build vorbereiten, könnte danach aber veraltete Informationen enthalten. **ISR** könnte die Seiten regelmäßig aktualisieren, lässt zwischen den Aktualisierungen jedoch ein Zeitfenster mit alten Daten.
+Mit **SSR** wird die Seite bei jedem Aufruf aus dem aktuellen Datenstand erzeugt und vollständig im HTML ausgeliefert. Das unterstützt direktes Teilen, Suchmaschinen und eine lesbare Erstdarstellung ohne JavaScript, benötigt aber einen laufenden Server und Rendering pro Request. **SSG** würde alle 20 Detailseiten beim Build vorbereiten und besonders günstig ausliefern, könnte danach aber veraltete Zeiten, Räume oder Speaker enthalten. **ISR** verbindet statische Auslieferung mit regelmäßiger Aktualisierung, lässt zwischen den Revalidierungen jedoch ein bewusstes Zeitfenster mit alten Daten. **CSR** würde den Server entlasten, ist für eine überwiegend lesende, direkt verlinkbare Detailseite aber schlechter: Inhalt und Metadaten wären erst nach JavaScript und Daten-Request verfügbar.
 
 ### Entscheidung
 
-Die Session-Detailseiten verwenden **SSR**. Obwohl die Seite selbst kaum Interaktion benötigt, ist die Aktualität der angezeigten Informationen wichtiger als eine vollständig statische Auslieferung.
+Die Session-Detailseiten verwenden **SSR**. Die nahegelegte Zuordnung für öffentliche, überwiegend lesende Inhalte wird damit beibehalten. Entscheidend ist, dass kurzfristige Programmänderungen beim nächsten Aufruf sichtbar sind, ohne Build, Revalidierungsfenster oder clientseitig leeres HTML. Der kleine Datensatz und nur 20 Detailseiten halten den zusätzlichen Rendering-Aufwand überschaubar.
 
 ### Konsequenzen
 
-Änderungen sind beim nächsten Seitenaufruf sichtbar, ohne dass die gesamte Anwendung neu gebaut werden muss. Dafür entsteht bei jedem Aufruf serverseitiger Rendering-Aufwand und die Seite benötigt eine erreichbare Datenquelle.
+Änderungen sind beim nächsten Seitenaufruf sichtbar, ohne dass die Anwendung neu gebaut werden muss. Inhalt und Metadaten stehen im initialen HTML. Dafür entstehen bei jedem Aufruf serverseitiger Rendering-Aufwand und ein Zugriff auf die Datenquelle; bei deren Ausfall gibt es keine statische Kopie als Fallback.
 
 ## D — Speaker-Profile
 

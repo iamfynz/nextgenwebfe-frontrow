@@ -1,8 +1,10 @@
 # Event-Plattform "Frontrow"
 ## Markenkonzept und Design-Tokens
+> Aktualisiert: 2026-11-01 auf den Stand nach Schritt 2 (Inter für Fließtext, Token-Anpassungen)
+
 Unser Team heißt Frontrow. Wir entwickeln eine Plattform für die Konferenz FrontendNow, auf der Besucher passende Sessions finden und ihr persönliches Programm zusammenstellen können. Die Website soll frisch und dynamisch wirken, aber trotzdem einfach zu bedienen sein. Statt viele Informationen gleichzeitig anzuzeigen, wollen wir die wichtigsten Inhalte klar darstellen. Die Gestaltung soll beim Orientieren helfen und nicht vom eigentlichen Programm ablenken.  
 Unsere Farbpalette besteht aus Dunkelgrün, Blau, Mint, Lime, Rosa, Rot und Creme. Creme verwenden wir als Hintergrund, weil es ruhiger und etwas wärmer wirkt als reines Weiß. Dunkelgrün ist hauptsächlich für Texte vorgesehen. Lime hebt wichtige Aktionen hervor, beispielsweise das Hinzufügen einer Session zum eigenen Programm. Mint verwenden wir für Inhaltsflächen, Blau und Rosa für weitere Akzente. Rot bekommt mit Warnungen einen eigenen Verwendungszweck. Warnungen sollen zusätzlich beschriftet sein, damit ihre Bedeutung nicht nur von der Farbe abhängt.  
-Als Schrift verwenden wir „Science Gothic“. Sie passt für uns zum technischen Thema der Konferenz und gibt der Website einen eigenen Charakter. Wir verwenden sie für Überschriften und Fließtext. Die Schriftgrößen reichen von 14 bis 48 Pixeln bei einer Basisgröße von 16 Pixeln. Dadurch können wir kleinere Zusatzinformationen, normale Texte und größere Überschriften unterscheiden.
+Für Überschriften verwenden wir „Science Gothic“. Sie passt zum technischen Thema der Konferenz und gibt der Website einen eigenen Charakter. Fließtext und Bedienelemente verwenden „Inter“, da die neutrale Sans-Serif-Schrift auch in längeren Texten und kleinen Beschriftungen gut lesbar bleibt. Die Trennung ist über `--font-heading` und `--font-body` semantisch abgebildet. Die Schriftgrößen reichen von 14 bis 48 Pixeln bei einer Basisgröße von 16 Pixeln. Dadurch können wir kleinere Zusatzinformationen, normale Texte und größere Überschriften unterscheiden.
 ## Aufbau der Tokens
 Das Token-Set ist in primitive und semantische Tokens aufgeteilt. Primitive Tokens enthalten konkrete Werte, beispielsweise Farbcodes, Abstände oder Schriftgrößen. Semantische Tokens beschreiben, wofür diese Werte verwendet werden. Beispielsweise enthält --primitive-color-cream den Farbwert, während --color-background diesen Wert als Hintergrund festlegt. Diese Aufteilung verwenden wir auch für Fonts, Spaces, Radien und Schriftgrößen.
 ### Wartbarkeit
@@ -13,6 +15,8 @@ Für Texte auf hellen Farbflächen gibt es zusätzlich --color-text-on-color. Di
 ### Konsistenz
 Das dritte Kriterium ist Konsistenz. Gemeinsame Skalen verhindern, dass jede Komponente eigene Abstände, Rundungen und Schriftgrößen bekommt. Kleine Spaces sind für Elemente innerhalb einer Gruppe gedacht, größere für Karten und Seitenabschnitte. Die drei Radien unterscheiden Eingabefelder, Karten und Buttons.
 Vorerst beschränken wir uns auf diese grundlegenden Kategorien. Dadurch bleibt das Set für beide Teammitglieder übersichtlich. Weitere Tokens können wir ergänzen, wenn sie bei der Umsetzung tatsächlich gebraucht werden.
+
+Seit Schritt 2 verweist `--spacing-section-margin` auf `--primitive-space-1` (0,25 rem) statt auf `--primitive-space-2`. Der engere Abstand trennt unmittelbar zusammengehörige Inhalte, ohne einen neuen primitiven Wert einzuführen. Außerdem wurde der Karten- und Footer-Hintergrund `--primitive-color-cream-600` auf `#f4f2ee` angepasst. Der etwas dunklere Creme-Ton hebt Flächen vom Seitenhintergrund ab; die semantischen Zuordnungen und das Token-System bleiben unverändert.
 ## Kontrastprüfung (WCAG 2.1 AA)
 
 Ergebnis des Cross-Reviews (Markus V., 2026-10-10), Werte mit dem WebAIM Contrast Checker nachgerechnet. Grenzwert: 4,5:1 für Normaltext, 3:1 für Großtext.
