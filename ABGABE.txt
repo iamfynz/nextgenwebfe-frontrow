@@ -11,19 +11,31 @@ Teammitglieder:     Markus Vogl     (markusvogl@outlook.at)
 
 Repository:         https://github.com/iamfynz/nextgenwebfe-frontrow
 Branch:             main
+Abgabe-Stand:       main, 2026-11-01 (Schritt-2-Inhalt bis Commit 3db21aa, diese Datei danach ergänzt)
+Schritt-2-PR:       https://github.com/iamfynz/nextgenwebfe-frontrow/pull/3  (gemerged)
 
-Deliverables:       docs/schritt2/01-rendering-strategie-adr.md   (A)
+Deliverables:       docs/schritt2/01-rendering-strategie-adr.md   (A: Rendering-ADR, 4 Entscheidungspunkte + Nachtrag)
                     docs/schritt2/AI-LOG-Windisch.md             (F)
                     docs/schritt2/AI-LOG-Vogl.md                 (F)
                     app/                                         (B–E, entspricht /src)
-                      pages/programm/            Übersicht + Filter (B), Detailseiten (C)
-                      pages/speakers/            Speaker-Profile (D)
-                      pages/mein-programm.vue    Mein Programm (E)
-                    server/api/conference-data.get.ts            (SSR-Simulation, ADR-Nachtrag)
-                    README.md                                    (Setup, Rendering pro Route)
+                      pages/programm/index.vue   Session-Übersicht + Filter (B, CSR)
+                      pages/programm/[id].vue    Session-Detailseiten (C, SSR)
+                      pages/speakers/            Speaker-Übersicht + Profile (D, SSR)
+                      pages/mein-programm.vue    Mein Programm (E, CSR, localStorage)
+                      composables/               useConferenceData (Datenschicht), useSessions,
+                                                 useSpeakers, useSessionFilter, useMyProgram
+                    server/api/conference-data.get.ts            (Datensatz pro Request, SSR-Simulation)
+                    nuxt.config.ts                               (routeRules: Rendering pro Route)
+                    README.md                                    (Setup, Rendering pro Route, SSR-Simulation)
 
 Schritt 1:          docs/schritt1/ (A–D, AI-LOG.md), tokens/tokens.css
 
+Aufgabenteilung:    Andrea Windisch  B (Übersicht + Filter), C (Detailseiten), ADR-Punkte B + C
+                    Markus Vogl      D (Speaker-Profile), E (Mein Programm), Laufzeit-Datenquelle, ADR-Punkte D + E
+                    Abweichung von der Angabe (B+D / C+E) im ADR-Nachtrag begründet; Cross-Review wechselseitig.
+
+Routen:             /programm · /programm/[id] · /speakers · /speakers/[id] · /mein-programm
+
 Start:              npm install
                     npm run dev   →  http://localhost:3000
-                    Production:  npm run build && node .output/server/index.mjs  (aus dem Projektroot)
+                    Production:   npm run build && node .output/server/index.mjs  (aus dem Projektroot)
