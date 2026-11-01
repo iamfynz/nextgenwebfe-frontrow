@@ -71,7 +71,7 @@ app/                      ← Quellcode (Nuxt-4-Konvention; entspricht /src der 
 server/api/conference-data.get.ts  liest den Datensatz pro Request (SSR-Simulation)
 tokens/tokens.css
 public/data/conference-data.json   geteilter, schreibgeschützter Datensatz
-docs/schritt1/                     Deliverables Schritt 1 (A–D)
+docs/schritt1/                     Deliverables Schritt 1 (A–D), AI-LOG Schritt 1
 docs/schritt2/                     Rendering-ADR, AI-LOGs
 ```
 
@@ -83,6 +83,7 @@ docs/schritt2/                     Rendering-ADR, AI-LOGs
 | Schritt 1 B | [ADR Komponenten- & Ordnerstruktur](docs/schritt1/02-architektur-adr.md) |
 | Schritt 1 C | [State-Management-Konzept](docs/schritt1/03-state-management-konzept.md) |
 | Schritt 1 D | [ADR Projekt-Setup](docs/schritt1/04-technologie-adr.md) |
+| Schritt 1 | [AI-LOG Schritt 1 (Team)](docs/schritt1/AI-LOG.md) |
 | Schritt 2 A | [ADR Rendering-Strategie](docs/schritt2/01-rendering-strategie-adr.md) |
 | Schritt 2 F | [AI-LOG Windisch](docs/schritt2/AI-LOG-Windisch.md) · [AI-LOG Vogl](docs/schritt2/AI-LOG-Vogl.md) |
 

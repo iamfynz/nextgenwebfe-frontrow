@@ -22,7 +22,7 @@ Deliverables:       docs/schritt2/01-rendering-strategie-adr.md   (A)
                     server/api/conference-data.get.ts            (SSR-Simulation, ADR-Nachtrag)
                     README.md                                    (Setup, Rendering pro Route)
 
-Schritt 1:          docs/schritt1/ (A–D), tokens/tokens.css, AI-LOG.md
+Schritt 1:          docs/schritt1/ (A–D, AI-LOG.md), tokens/tokens.css
 
 Start:              npm install
                     npm run dev   →  http://localhost:3000
