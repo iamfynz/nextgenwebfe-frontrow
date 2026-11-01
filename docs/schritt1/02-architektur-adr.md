@@ -1,6 +1,6 @@
 # B — ADR: Komponenten- & Ordnerstruktur
 
-> Federführung: Person 2 · Datum: 2026-10-06
+> Federführung: Person 2 · Datum: 2026-10-06 · Aktualisiert: 2026-10-31 auf den Stand nach Schritt 2 (Ordnernamen, Routen, Komponentenübersicht)
 
 ## Kontext
 
@@ -11,7 +11,7 @@ FrontRow braucht drei Seitentypen (Übersichten mit Filter, Detailseiten, person
 ### Ordnerstruktur
 
 **Option 1 — Technische Schichten**
-`components/base`, `components/features/<domäne>`, `components/layout`, dazu `composables/`, `pages/`, `layouts/`, `types/`.
+`components/base`, `components/<domäne>` (Feature-Layer: `session`, `speaker`, `program`), `components/layout`, dazu `composables/`, `pages/`, `layouts/`, `types/`.
 + Entspricht der geforderten Schichtung Base/UI → Feature → Layout; passt zu Nuxt-Konventionen; Base-Komponenten sind sofort als domänenfrei erkennbar.
 − Bei starkem Wachstum liegen Composable und Komponente eines Features in verschiedenen Ordnern.
 
@@ -26,9 +26,9 @@ FrontRow braucht drei Seitentypen (Übersichten mit Filter, Detailseiten, person
 
 ### Headless-Aufteilung für die zentrale Interaktion „Session-Filterung"
 
-Die Interaktion wird in Schritt 2 umgesetzt; hier wird die Aufteilung vorab entschieden.
+Die Aufteilung wurde in Schritt 1 vorab entschieden und in Schritt 2 so umgesetzt.
 
-**Option A — Logik als Composable `useSessionFilter()`, Darstellung in `SessionFilterBar.vue`**
+**Option A — Logik als Composable `useSessionFilter()`, Darstellung in `SessionFilter.vue`**
 + Filterzustand und Ableitung sind reine Daten (kein DOM) → ohne Mounting testbar.
 + Dieselbe Logik dient der Programmübersicht und „Mein Programm" (z. B. nach Tag filtern).
 + Die Darstellung ist austauschbar: Selects am Desktop, Chips/Bottom-Sheet am Handy — ohne die Logik anzufassen. URL-Synchronisation (Query-Params) lässt sich später im Composable ergänzen, ohne UI-Änderung.
@@ -44,39 +44,49 @@ Die Logik ist ein `toggle(id)` auf dem geteilten `useMyProgram()`-State. `Progra
 
 Option 1 (technische Schichten) + Option A (Filter headless).
 
+Stand nach Schritt 2:
+
 ```
 app/
 ├── assets/css/main.css        Tailwind-Einstieg
 ├── components/
-│   ├── base/                  Base/UI-Layer: domänenfrei (BaseCard; ab Schritt 2 BaseBadge, BaseButton)
-│   ├── features/              (ab Schritt 2) session/: SessionCard, SessionFilterBar · speaker/: SpeakerCard · program/: ProgramToggle
-│   └── layout/                AppHeader, AppFooter
-├── composables/               useConferenceData (Schritt 1) · ab Schritt 2: useSessionFilter, useMyProgram
+│   ├── base/                  Base/UI-Layer, domänenfrei: BaseCard, BaseButton (mit `to` ein NuxtLink)
+│   ├── session/               Feature: SessionCard, SessionList, SessionFilter, SessionDetailHero, SessionDetailGrid, SessionDetailSpeakerCard
+│   ├── speaker/               Feature: SpeakerCard, SpeakerDetailHero, SpeakerSessionList
+│   ├── program/               Feature: ProgramToggle
+│   └── layout/                AppHeader (Navigation + Zähler), AppFooter
+├── composables/               useConferenceData (Datenschicht) · useSessions, useSpeakers, useSessionFilter, useMyProgram (Domäne)
 ├── layouts/default.vue
-├── pages/                     index (Schritt 1) · ab Schritt 2: sessions/, sessions/[id], speakers/, speakers/[id], mein-programm
+├── pages/                     index · programm/, programm/[id] · speakers/, speakers/[id] · mein-programm
+├── utils/formatDay.ts         einzige Datumsformatierung (Konferenz-Zeitzone)
 └── types/conference.ts
+server/api/conference-data.get.ts   liest den Datensatz pro Request (siehe Rendering-ADR Schritt 2)
 public/data/conference-data.json
-docs/schritt1/
+docs/schritt1/ · docs/schritt2/
 ```
 
+Zwei Abweichungen vom ursprünglichen Plan, beide in Schritt 2 entschieden:
+- Die Feature-Ordner liegen direkt unter `components/` statt unter `components/features/`. Mit `pathPrefix: false` trägt die Zwischenebene nichts zum Komponentennamen bei, und `session/`, `speaker/`, `program/` sind neben `base/` und `layout/` ebenso klar als Feature-Layer erkennbar. Die Schicht-Regeln gelten unverändert.
+- Die Session-Übersicht heißt `/programm` statt `/sessions`, die Detailseite entsprechend `/programm/[id]` (Begriff der Besucher:innen; siehe Rendering-ADR, Nachtrag). `SessionFilterBar` heißt `SessionFilter`.
+
 **Schicht-Regeln:**
-- **Base** kennt keine Domäne, keinen State, nur Props/Slots.
+- **Base** kennt keine Domäne, keinen State, nur Props/Slots/Emits.
 - **Feature** kennt die Domäne, erhält aufgelöste Daten per Props (SessionCard bekommt Track/Room/Speaker fertig) oder nutzt Composables (ProgramToggle), komponiert Base-Komponenten.
-- **Layout** rahmt Seiten (Header/Footer), kennt Navigation und globalen Zähler (ab Schritt 2).
-- **Pages** orchestrieren: `await useConferenceData()`, Filter-Composable, Übergabe an Features. Kein Markup-Detail.
-- **Composables** sind zweischichtig: `useConferenceData` (Datenschicht: laden, indizieren, joinen) und darauf aufbauende Domänen-Composables (`useSessionFilter`, `useMyProgram`, ab Schritt 2 `useSessions`/`useSpeakers`). Nur die Datenschicht ruft `useAsyncData` auf. Details in [Konzept C](./03-state-management-konzept.md).
+- **Layout** rahmt Seiten (Header/Footer), kennt Navigation und den globalen Zähler aus `useMyProgram`.
+- **Pages** orchestrieren: `await useSessions()` / `useSpeakers()`, Filter-Composable, Übergabe an Features. Kein Markup-Detail.
+- **Composables** sind zweischichtig: `useConferenceData` (Datenschicht: laden, indizieren, joinen) und darauf aufbauende Domänen-Composables (`useSessions`, `useSpeakers`, `useSessionFilter`, `useMyProgram`). Nur die Datenschicht ruft `useAsyncData` auf. Details in [Konzept C](./03-state-management-konzept.md).
 - Komponenten werden **ohne Pfad-Präfix** registriert (`pathPrefix: false`) → Dateinamen müssen projektweit eindeutig sein.
 
 ## Komponentenübersicht
 
-In Schritt 1 existieren `pages/index`, Layout, `BaseCard` und `useConferenceData`. Diese Knoten sind im Diagramm hervorgehoben. Alle anderen sind geplant und zur Einordnung bereits eingezeichnet; sie entstehen mit den Seiten in Schritt 2.
+Stand nach Schritt 2; alle Knoten existieren.
 
 ```mermaid
 flowchart TD
   subgraph Pages
     P1[pages/index]
-    P2[pages/sessions/index]
-    P3["pages/sessions/[id]"]
+    P2[pages/programm/index]
+    P3["pages/programm/[id]"]
     P4[pages/speakers/index]
     P5["pages/speakers/[id]"]
     P6[pages/mein-programm]
@@ -85,36 +95,43 @@ flowchart TD
     C1[useConferenceData]
     C2[useSessionFilter]
     C3[useMyProgram]
+    C4[useSessions]
+    C5[useSpeakers]
   end
   subgraph Feature
     F1[SessionCard]
-    F2[SessionFilterBar]
+    F2[SessionFilter]
     F3[SpeakerCard]
     F4[ProgramToggle]
+    F5[SessionList]
+    F6[SessionDetail*]
+    F7[SpeakerDetailHero / SpeakerSessionList]
   end
   subgraph Base
     B1[BaseCard]
-    B2[BaseBadge]
     B3[BaseButton]
   end
   subgraph Layout
     L1[AppHeader]
     L2[AppFooter]
   end
-  P1 & P2 & P3 & P4 & P5 & P6 --> C1
+  S[server/api/conference-data] --> C1
+  C4 & C5 --> C1
+  P1 --> C1
+  P2 & P3 & P6 --> C4
+  P4 & P5 --> C5
+  P5 --> C4
   P2 --> C2 --> F2
-  P2 & P3 & P5 & P6 --> F1
+  P2 & P6 --> F5 --> F1
+  P3 --> F6
   P4 --> F3
+  P5 --> F7
   F1 --> F4 --> C3
   P3 --> F4
   P6 --> C3
   L1 --> C3
-  F1 --> B1 & B2
-  F3 --> B1
-  F2 --> B3
-  F4 --> B3
-  classDef done fill:#e2e8f0,stroke:#334155,stroke-width:2px
-  class P1,C1,B1,L1,L2 done
+  F1 & F3 & F6 & F7 --> B1
+  F1 & F2 & F3 & F4 & F6 & F7 --> B3
 ```
 
 ## Konsequenzen

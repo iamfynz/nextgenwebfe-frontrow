@@ -5,14 +5,7 @@ const props = defineProps<{
   session: SessionDetails
 }>()
 
-const formattedDay = computed(() =>
-  new Intl.DateTimeFormat('de-AT', {
-    weekday: 'short',
-    day: '2-digit',
-    month: '2-digit',
-    timeZone: 'Europe/Vienna',
-  }).format(new Date(`${props.session.day}T12:00:00`)),
-)
+const formattedDay = computed(() => formatDay(props.session.day))
 </script>
 
 <template>
@@ -57,12 +50,10 @@ const formattedDay = computed(() =>
     </div>
 
     <template #footer>
-      <BaseLinkButton :to="`/programm/${session.id}`" variant="secondary">
+      <BaseButton :to="`/programm/${session.id}`" variant="secondary">
         Details ansehen <span aria-hidden="true">→</span>
-      </BaseLinkButton>
-      <BaseButton :to="`/programm/${session.id}`">
-        Merken
       </BaseButton>
+      <ProgramToggle :session-id="session.id" />
     </template>
   </BaseCard>
 </template>

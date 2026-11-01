@@ -11,15 +11,7 @@ if (!session.value) {
   })
 }
 
-const formattedDay = computed(() =>
-  new Intl.DateTimeFormat('de-AT', {
-    weekday: 'long',
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'Europe/Vienna',
-  }).format(new Date(`${session.value!.day}T12:00:00`)),
-)
+const formattedDay = computed(() => formatDay(session.value!.day, 'long'))
 
 const metaItems = computed(() => [
   { label: 'Datum', value: formattedDay.value },
@@ -46,6 +38,14 @@ useSeoMeta({
     </NuxtLink>
 
     <SessionDetailHero :session="session" :track-name="session.track?.name" />
+
+    <div class="flex flex-wrap items-center gap-control">
+      <ProgramToggle :session-id="session.id" />
+      <p class="text-small text-text-light">
+        Gemerkte Sessions findest du unter
+        <NuxtLink to="/mein-programm" class="font-bold underline underline-offset-4">Mein Programm</NuxtLink>.
+      </p>
+    </div>
 
     <SessionDetailGrid :items="metaItems" />
 

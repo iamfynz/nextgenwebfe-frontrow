@@ -1,14 +1,14 @@
 # C — State-Management-Konzept: „Mein Programm" & conference-data.json
 
-> Federführung: Person 2
-> Umsetzungsstand: `useConferenceData()` ist in Schritt 1 implementiert; `useMyProgram()` folgt mit den Seiten in Schritt 2.
+> Federführung: Person 2 · Aktualisiert: 2026-10-31 auf den Stand nach Schritt 2 (Datenquelle zur Laufzeit, Dashboard als CSR-Route)
+> Umsetzungsstand: `useConferenceData()` seit Schritt 1, `useMyProgram()` seit Schritt 2 implementiert.
 
 ## Zwei Arten von State
 
 | | Geteilter Datensatz | „Mein Programm" |
 |---|---|---|
-| Quelle | `conference-data.json` (schreibgeschützt) | Nutzer:in |
-| Lebensdauer | für alle gleich, ändert sich nur per Deployment | pro Gerät, dauerhaft |
+| Quelle | `conference-data.json` (schreibgeschützt für die App) | Nutzer:in |
+| Lebensdauer | für alle gleich; kann sich ohne Deployment ändern (Datei wird pro Request gelesen), nie pro Nutzer:in | pro Gerät, dauerhaft |
 | Größe | 20 Sessions, 18 Speaker | einige IDs |
 | Rendering | server-/statisch renderbar | nur im Browser bekannt |
 
@@ -16,11 +16,11 @@ Beide werden getrennt in eigenen Composables modelliert, ohne zusätzliche Libra
 
 ## Geteilter Datensatz: `useConferenceData()`
 
-**Laden.** Ein `useAsyncData('conference-data', …)` mit festem Key: Nuxt dedupliziert parallele Aufrufe, überträgt das Ergebnis im Payload zum Client (kein zweiter Fetch) und cached es bei Client-Navigation. Serverseitig wird die Datei importiert, clientseitig aus `/public/data/` geladen — der Pfad, den in Schritt 3 der Service Worker cachen kann. In `localStorage` wird der Datensatz bewusst nicht kopiert: Er ist für alle gleich, eine lokale Kopie veraltet, und Offline-Verfügbarkeit löst der Service Worker auf HTTP-Ebene.
+**Laden.** Ein `useAsyncData('conference-data', …)` mit festem Key: Nuxt dedupliziert parallele Aufrufe, überträgt das Ergebnis im Payload zum Client (kein zweiter Fetch) und cached es bei Client-Navigation. Server und Client holen den Datensatz von der Nitro-Route `/api/conference-data`, die `public/data/conference-data.json` bei jedem Request liest (Simulation einer veränderlichen Datenquelle, Begründung in der [Rendering-ADR Schritt 2](../schritt2/01-rendering-strategie-adr.md#nachtrag-zur-umsetzung)). Während SSR beantwortet Nitro den `$fetch` intern ohne HTTP; im Browser ist es ein Request, den in Schritt 3 der Service Worker cachen kann. In `localStorage` wird der Datensatz bewusst nicht kopiert: Er ist für alle gleich, eine lokale Kopie veraltet, und Offline-Verfügbarkeit löst der Service Worker auf HTTP-Ebene.
 
 **Modellieren.** Vier Listen als `computed`, `Map`-Indizes für O(1)-Lookups (`getSession(id)` …) und die Joins `speakersForSession()` / `sessionsForSpeaker()`. Komponenten erhalten aufgelöste Objekte per Props.
 
-**Schichtung.** Nur diese Datenschicht ruft `useAsyncData` auf. Domänen-Composables (`useSessionFilter()`, `useMyProgram()`, ab Schritt 2 `useSessions()`) bauen darauf auf, statt selbst zu laden — sonst würde der Datensatz mehrfach geladen und die Joins zerrissen. Schicht-Regeln siehe [ADR B](./02-architektur-adr.md).
+**Schichtung.** Nur diese Datenschicht ruft `useAsyncData` auf. Domänen-Composables (`useSessions()`, `useSpeakers()`, `useSessionFilter()`, `useMyProgram()`) bauen darauf auf, statt selbst zu laden — sonst würde der Datensatz mehrfach geladen und die Joins zerrissen. Schicht-Regeln siehe [ADR B](./02-architektur-adr.md).
 
 ## Persönlicher State: `useMyProgram()`
 
@@ -30,22 +30,25 @@ Beide werden getrennt in eigenen Composables modelliert, ohne zusätzliche Libra
 
 **Persistenz.** Key `frontrow:my-program:v1` (Versionssuffix für Migrationen). Geschrieben wird explizit in den Mutationen, nicht über einen Watcher am Scope einer Komponente. Fehler (Quota, Private Mode) schlagen still fehl.
 
-**Rehydration.** Einmalig in `onMounted` (Flag `isHydrated`), damit Server-HTML und erster Client-Render identisch sind. Bis dahin zeigt das Dashboard einen Ladehinweis.
+**Rehydration.** Einmalig in `onMounted` (Flag `isHydrated`), damit Server-HTML und erster Client-Render identisch sind. Bis dahin zeigt das Dashboard einen Ladehinweis und die Merken-Buttons auf SSR-Seiten sind deaktiviert. Das Dashboard `/mein-programm` selbst ist eine CSR-Route (`ssr: false`), weil der Server dort nichts Sinnvolles rendern könnte (Rendering-ADR, Punkt E).
 
 ## Datenfluss
 
 ```mermaid
 sequenceDiagram
   participant JSON as conference-data.json
+  participant API as /api/conference-data
   participant CD as useConferenceData()
   participant Page as Page / SessionCard
   participant MP as useMyProgram()
   participant LS as localStorage
 
   Note over Page: Erstaufruf oder Neuladen der Seite
-  Page->>CD: await useConferenceData()
-  CD->>JSON: import (Server) · $fetch (Client)
-  JSON-->>CD: ConferenceData
+  Page->>CD: await useSessions() → useConferenceData()
+  CD->>API: $fetch (SSR: intern · Client: HTTP)
+  API->>JSON: Datei pro Request lesen
+  JSON-->>API: ConferenceData
+  API-->>CD: ConferenceData
   CD-->>Page: sessions, getSession(), …
   Page->>MP: useMyProgram()
   MP-->>Page: sessionIds = [] (Server & 1. Client-Render identisch)
@@ -70,5 +73,6 @@ sequenceDiagram
 
 - (+) Eine Datenquelle, keine Kopien; Programmänderungen schlagen überall durch.
 - (+) Kein Store-Framework, zwei kleine typisierte Composables.
-- (−) Kurzes Aufblitzen des leeren Zustands vor der Rehydration (Schritt 2: `<ClientOnly>` fürs Dashboard).
+- (−) Kurzes Aufblitzen des leeren Zustands vor der Rehydration (umgesetzt: Dashboard als CSR-Route mit Ladehinweis, Toggles bis zur Rehydration deaktiviert).
+- (−) Die App hängt an einer erreichbaren Datenroute; fällt sie aus, gibt es keine veraltete Kopie als Fallback (bewusst, siehe Rendering-ADR).
 - (−) Keine Tab-Synchronisation (per `storage`-Event ergänzbar).
