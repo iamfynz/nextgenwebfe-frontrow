@@ -2,7 +2,7 @@
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { clientsClaim } from 'workbox-core'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
-import { googleFontsCache, warmStrategyCache } from 'workbox-recipes'
+import { googleFontsCache } from 'workbox-recipes'
 import { registerRoute } from 'workbox-routing'
 import { NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies'
 
@@ -34,17 +34,18 @@ googleFontsCache({ cachePrefix: 'frontrow-fonts' })
 // Network First statt Cache First, weil das HTML der SSR-Seiten den Datenstand enthält und sonst
 // einfriert. Antwortet das Netz nicht binnen 3 Sekunden (überlastetes Konferenz-WLAN), kommt die
 // zuletzt gesehene Fassung aus dem Cache.
+const PAGE_CACHE = 'frontrow-pages'
 const SPA_SHELL_URL = '/mein-programm'
 const pageStrategy = new NetworkFirst({
-  cacheName: 'frontrow-pages',
+  cacheName: PAGE_CACHE,
   networkTimeoutSeconds: 3,
   plugins: [new CacheableResponsePlugin({ statuses: [200] })],
 })
 // Startseite und App-Shell liegen ab der Installation im Cache. /mein-programm ist eine CSR-Route:
 // Ihr HTML ist die leere Nuxt-Shell ohne seitenspezifischen Inhalt, der Router rendert im Browser
 // die Seite zur aktuellen URL. Sie dient deshalb als Rückfall für jede Seite, die noch nie online
-// geöffnet wurde. Die Inhalte kommen dann aus dem Daten-Cache unten.
-warmStrategyCache({ urls: ['/', SPA_SHELL_URL], strategy: pageStrategy })
+// geöffnet wurde. Die Inhalte kommen dann aus dem Daten-Cache unten. Vorgeladen wird beides im
+// install-Schritt am Ende der Datei.
 registerRoute(
   ({ request }) => request.mode === 'navigate',
   async (options) => {
@@ -52,7 +53,7 @@ registerRoute(
       return await pageStrategy.handle(options)
     }
     catch {
-      const shell = await caches.match(SPA_SHELL_URL, { cacheName: 'frontrow-pages' })
+      const shell = await caches.match(SPA_SHELL_URL, { cacheName: PAGE_CACHE })
       return shell ?? Response.error()
     }
   },
@@ -61,15 +62,32 @@ registerRoute(
 // --- Sessions-/Speaker-Daten (Person 2, C): Stale While Revalidate ------------------------
 // Alle Programmdaten kommen aus dieser einen JSON-Route (useConferenceData).
 const CONFERENCE_DATA_URL = '/api/conference-data'
+const DATA_CACHE = 'frontrow-data'
 const conferenceDataStrategy = new StaleWhileRevalidate({
-  cacheName: 'frontrow-data',
+  cacheName: DATA_CACHE,
   plugins: [new CacheableResponsePlugin({ statuses: [200] })],
 })
-// Schon bei der Installation laden: Auf SSR-Seiten stecken die Daten im HTML-Payload, der Browser
-// ruft die Route dann gar nicht ab. Ohne dieses Vorwärmen wäre der Daten-Cache nach einem Einstieg
-// über die Startseite leer und „Mein Programm" könnte offline keine Session auflösen.
-warmStrategyCache({ urls: [CONFERENCE_DATA_URL], strategy: conferenceDataStrategy })
+// Die Daten werden schon bei der Installation geladen (install-Schritt unten): Auf SSR-Seiten
+// stecken sie im HTML-Payload, der Browser ruft die Route dann gar nicht ab. Ohne das Vorladen wäre
+// der Daten-Cache nach einem Einstieg über die Startseite leer und „Mein Programm" könnte offline
+// keine Session auflösen.
 registerRoute(
   ({ url, sameOrigin }) => sameOrigin && url.pathname === CONFERENCE_DATA_URL,
   conferenceDataStrategy,
 )
+
+// --- Installation: Startseite, App-Shell und Programmdaten vorladen ------------------------
+// cache.add() schlägt bei Netzfehlern und bei jeder Antwort außer 2xx fehl. Dann scheitert die
+// ganze Installation und der Browser versucht sie beim nächsten Seitenaufruf erneut. So wird der
+// Service Worker nie aktiv, ohne dass App-Shell und Daten wirklich im Cache liegen. (Workbox'
+// warmStrategyCache würde solche Fehler verschlucken.)
+self.addEventListener('install', (event) => {
+  const preload = async (cacheName: string, urls: string[]) => {
+    const cache = await caches.open(cacheName)
+    await Promise.all(urls.map(url => cache.add(new Request(url, { cache: 'reload' }))))
+  }
+  event.waitUntil(Promise.all([
+    preload(PAGE_CACHE, ['/', SPA_SHELL_URL]),
+    preload(DATA_CACHE, [CONFERENCE_DATA_URL]),
+  ]))
+})
