@@ -41,6 +41,7 @@ Umgebung: Chrome 157.0.8103.78 (arm64), macOS, Produktions-Build auf `http://loc
 | Installier-Symbol in der Adresszeile | ![](assets/install-03-adresszeile.png) |
 | Installier-Dialog | ![](assets/install-04-dialog.png) |
 | Installierte App im eigenen Fenster | ![](assets/install-05-app-fenster.png) |
+| Lighthouse in Chrome 157: keine PWA-Kategorie | ![](assets/lighthouse-kategorien.png) |
 
 ## Einordnung
 
@@ -48,4 +49,4 @@ Getestet wurde der Produktions-Build von Hand in Chrome, nicht der Dev-Server, w
 
 In Szenario iii lädt ohne Service Worker nichts von FrontRow; Chrome zeigt seine eigene Offline-Seite.
 
-Lücken: Szenario iii lief auf einem Rechner, auf dem die App noch installiert war, deshalb „You're offline" statt der üblichen Fehlerseite. Ein Lighthouse-Audit liegt nicht bei. Das Manifest hat Warnungen: `purpose: "any maskable"` wird nicht empfohlen, und für den erweiterten Installier-Dialog fehlen Screenshots. Getestet wurde nur Chrome auf macOS gegen `localhost`, kein Handy, kein Safari, kein HTTPS. Der Einstieg über die Startseite in Szenario ii und Andreas Durchlauf stehen aus.
+Lücken: Szenario iii lief auf einem Rechner, auf dem die App noch installiert war, deshalb „You're offline" statt der üblichen Fehlerseite. Ein Lighthouse-PWA-Audit gibt es nicht: Chrome 157 bietet die Kategorie nicht mehr an, die Installierbarkeit ist deshalb über das Application-Panel und die tatsächliche Installation belegt. Das Manifest hat Warnungen: `purpose: "any maskable"` wird nicht empfohlen, und für den erweiterten Installier-Dialog fehlen Screenshots. Getestet wurde nur Chrome auf macOS gegen `localhost`, kein Handy, kein Safari, kein HTTPS. Der Einstieg über die Startseite in Szenario ii und Andreas Durchlauf stehen aus.
