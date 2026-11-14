@@ -4,7 +4,7 @@ import { clientsClaim } from 'workbox-core'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import { warmStrategyCache } from 'workbox-recipes'
 import { registerRoute } from 'workbox-routing'
-import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
+import { NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies'
 
 declare let self: ServiceWorkerGlobalScope
 
@@ -22,16 +22,34 @@ clientsClaim()
 precacheAndRoute(self.__WB_MANIFEST)
 cleanupOutdatedCaches()
 
-// --- App-Shell-Routen (Person 1, C): Cache First ------------------------------------------
-const APP_SHELL_ROUTES = ['/', '/mein-programm']
-const appShellStrategy = new CacheFirst({
-  cacheName: 'frontrow-shell',
+// --- Seiten (HTML-Dokumente): Network First mit Zeitlimit, sonst Cache, sonst App-Shell ----
+// Betrifft nur echte Dokument-Requests (Erstaufruf, Neuladen, Start der installierten App). Klicks
+// innerhalb der App laufen über den Vue-Router und brauchen kein neues Dokument.
+// Network First statt Cache First, weil das HTML der SSR-Seiten den Datenstand enthält und sonst
+// einfriert. Antwortet das Netz nicht binnen 3 Sekunden (überlastetes Konferenz-WLAN), kommt die
+// zuletzt gesehene Fassung aus dem Cache.
+const SPA_SHELL_URL = '/mein-programm'
+const pageStrategy = new NetworkFirst({
+  cacheName: 'frontrow-pages',
+  networkTimeoutSeconds: 3,
   plugins: [new CacheableResponsePlugin({ statuses: [200] })],
 })
-warmStrategyCache({ urls: APP_SHELL_ROUTES, strategy: appShellStrategy })
+// Startseite und App-Shell liegen ab der Installation im Cache. /mein-programm ist eine CSR-Route:
+// Ihr HTML ist die leere Nuxt-Shell ohne seitenspezifischen Inhalt, der Router rendert im Browser
+// die Seite zur aktuellen URL. Sie dient deshalb als Rückfall für jede Seite, die noch nie online
+// geöffnet wurde. Die Inhalte kommen dann aus dem Daten-Cache unten.
+warmStrategyCache({ urls: ['/', SPA_SHELL_URL], strategy: pageStrategy })
 registerRoute(
-  ({ request, url }) => request.mode === 'navigate' && APP_SHELL_ROUTES.includes(url.pathname),
-  appShellStrategy,
+  ({ request }) => request.mode === 'navigate',
+  async (options) => {
+    try {
+      return await pageStrategy.handle(options)
+    }
+    catch {
+      const shell = await caches.match(SPA_SHELL_URL, { cacheName: 'frontrow-pages' })
+      return shell ?? Response.error()
+    }
+  },
 )
 
 // --- Sessions-/Speaker-Daten (Person 2, C): Stale While Revalidate ------------------------
