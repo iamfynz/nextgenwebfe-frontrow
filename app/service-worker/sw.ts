@@ -91,3 +91,25 @@ self.addEventListener('install', (event) => {
     preload(DATA_CACHE, [CONFERENCE_DATA_URL]),
   ]))
 })
+
+// --- Aktivierung: Reste älterer Fassungen entfernen ---------------------------------------
+// 1. Gecachte Seiten gehören zum Build, mit dem sie geladen wurden: Ihr HTML verweist auf dessen
+//    Bundles, und die löscht cleanupOutdatedCaches() beim Update aus dem Precache. Deshalb fliegen
+//    alle Seiten außer den beiden gerade frisch vorgeladenen raus; sie kommen beim nächsten
+//    Online-Aufruf wieder, offline springt bis dahin die App-Shell ein.
+// 2. Die Caches des ersten, handgeschriebenen Service Workers (frontrow-v1-*) nutzt niemand mehr.
+self.addEventListener('activate', (event) => {
+  const dropStalePages = async () => {
+    const cache = await caches.open(PAGE_CACHE)
+    const keep = new Set(['/', SPA_SHELL_URL])
+    const requests = await cache.keys()
+    await Promise.all(requests
+      .filter(request => !keep.has(new URL(request.url).pathname))
+      .map(request => cache.delete(request)))
+  }
+  const dropLegacyCaches = async () => {
+    const names = await caches.keys()
+    await Promise.all(names.filter(name => name.startsWith('frontrow-v1-')).map(name => caches.delete(name)))
+  }
+  event.waitUntil(Promise.all([dropStalePages(), dropLegacyCaches()]))
+})
