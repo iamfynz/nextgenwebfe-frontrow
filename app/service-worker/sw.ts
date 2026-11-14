@@ -39,7 +39,18 @@ const SPA_SHELL_URL = '/mein-programm'
 const pageStrategy = new NetworkFirst({
   cacheName: PAGE_CACHE,
   networkTimeoutSeconds: 3,
-  plugins: [new CacheableResponsePlugin({ statuses: [200] })],
+  plugins: [
+    new CacheableResponsePlugin({ statuses: [200] }),
+    {
+      // Ein Serverfehler (5xx) zählt wie ein Netzfehler: Dann greift der Cache, statt dass die
+      // Fehlerseite des Servers angezeigt wird, obwohl eine brauchbare Fassung vorliegt.
+      // 404 und andere 4xx bleiben echte Antworten.
+      fetchDidSucceed: async ({ response }) => {
+        if (response.status >= 500) throw new Error(`Serverfehler ${response.status}`)
+        return response
+      },
+    },
+  ],
 })
 // Startseite und App-Shell liegen ab der Installation im Cache. /mein-programm ist eine CSR-Route:
 // Ihr HTML ist die leere Nuxt-Shell ohne seitenspezifischen Inhalt, der Router rendert im Browser
