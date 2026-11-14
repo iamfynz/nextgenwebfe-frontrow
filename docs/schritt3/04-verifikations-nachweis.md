@@ -23,6 +23,9 @@ Umgebung: Chrome 157.0.8103.78 (arm64), macOS, Produktions-Build auf `http://loc
 | Offline neu geladen, Zustand bleibt | ![](assets/s2-03-offline-programm.png) |
 | `/mein-programm` offline: 2 Sessions | ![](assets/s2-04-offline-mein-programm.png) |
 | Eine entfernt, neu geladen: 1 Session | ![](assets/s2-05-offline-nach-entfernen.png) |
+| Zweiter Durchlauf über die Startseite: Service Worker aktiv | ![](assets/s2b-01-startseite-sw-aktiv.png) |
+| Per Klick ins Programm, gemerkt, offline neu geladen | ![](assets/s2b-02-offline-programm.png) |
+| `/mein-programm` offline: 2 Sessions | ![](assets/s2b-03-offline-mein-programm.png) |
 
 ### Szenario iii — Erstbesuch offline
 
@@ -50,4 +53,4 @@ Getestet wurde der Produktions-Build von Hand in Chrome, weil der Service Worker
 
 In Szenario iii lädt ohne Service Worker nichts von FrontRow; Chrome zeigt seine eigene Offline-Seite.
 
-Lücken: Szenario iii lief auf einem Rechner, auf dem die App noch installiert war, deshalb „You're offline" statt der üblichen Fehlerseite. Das Lighthouse-Audit lief mit der alten Version 11.7.1, weil Chrome 157 die PWA-Kategorie nicht mehr anbietet; es besteht alle sechs automatischen Prüfungen. Das Manifest hat Warnungen: `purpose: "any maskable"` wird nicht empfohlen, und für den erweiterten Installier-Dialog fehlen Screenshots. Getestet wurde nur Chrome auf macOS gegen `localhost`, kein Handy, kein Safari, kein HTTPS. Der Einstieg über die Startseite in Szenario ii und Andreas Durchlauf stehen aus.
+Lücken: Szenario iii lief auf einem Rechner, auf dem die App noch installiert war, deshalb „You're offline" statt der üblichen Fehlerseite. Das Lighthouse-Audit lief mit der alten Version 11.7.1, weil Chrome 157 die PWA-Kategorie nicht mehr anbietet; es besteht alle sechs automatischen Prüfungen. Das Manifest hat Warnungen: `purpose: "any maskable"` wird nicht empfohlen, und für den erweiterten Installier-Dialog fehlen Screenshots. Getestet wurde nur Chrome auf macOS gegen `localhost`, kein Handy, kein Safari, kein HTTPS. Andreas Durchlauf steht aus.
