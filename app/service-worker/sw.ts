@@ -42,6 +42,13 @@ const pageStrategy = new NetworkFirst({
   plugins: [
     new CacheableResponsePlugin({ statuses: [200] }),
     {
+      // Seiten hängen nicht von Query-Parametern ab. Ohne sie im Cache-Schlüssel trifft auch
+      // /?utm_source=mail den Eintrag für / und der Cache wächst nicht mit jeder Variante.
+      cacheKeyWillBeUsed: async ({ request }) => {
+        const url = new URL(request.url)
+        url.search = ''
+        return url.href
+      },
       // Ein Serverfehler (5xx) zählt wie ein Netzfehler: Dann greift der Cache, statt dass die
       // Fehlerseite des Servers angezeigt wird, obwohl eine brauchbare Fassung vorliegt.
       // 404 und andere 4xx bleiben echte Antworten.
@@ -57,8 +64,11 @@ const pageStrategy = new NetworkFirst({
 // die Seite zur aktuellen URL. Sie dient deshalb als Rückfall für jede Seite, die noch nie online
 // geöffnet wurde. Die Inhalte kommen dann aus dem Daten-Cache unten. Vorgeladen wird beides im
 // install-Schritt am Ende der Datei.
+// /api/ und /data/ liefern JSON, keine Seiten: Wer sie direkt in der Adresszeile öffnet, soll
+// weder die App-Shell bekommen noch den Seiten-Cache füllen.
 registerRoute(
-  ({ request }) => request.mode === 'navigate',
+  ({ request, url }) => request.mode === 'navigate'
+    && !url.pathname.startsWith('/api/') && !url.pathname.startsWith('/data/'),
   async (options) => {
     try {
       return await pageStrategy.handle(options)
