@@ -26,7 +26,10 @@ Umgebung: Chrome 157.0.8103.78 (arm64), macOS, Produktions-Build auf `http://loc
 
 ### Szenario iii — Erstbesuch offline
 
-Noch kein gültiger Beleg, siehe Protokoll.
+| Schritt | Beleg |
+|---|---|
+| Site-Daten gelöscht, Service Worker „deleted", Offline an | ![](assets/s3-01-ausgangslage-sw-geloescht.png) |
+| Aufruf offline: Chrome-Seite „You're offline" | ![](assets/s3-02-erstbesuch-offline.png) |
 
 ### Installierbarkeit
 
@@ -41,6 +44,8 @@ Noch kein gültiger Beleg, siehe Protokoll.
 
 ## Einordnung
 
-Getestet wurde der Produktions-Build von Hand in Chrome, nicht der Dev-Server, weil der Service Worker erst beim Build entsteht. Offline geschaltet wurde in den DevTools, im Service-Workers-Panel und im Network-Tab. Der Network-Tab zeigt, was tatsächlich passiert: Die Netzversuche des Service Workers für Seite und Daten schlagen fehl, die Seite bekommt beides trotzdem mit Status 200 aus dem Service Worker. Das entspricht den Regeln Network First für Seiten und Stale While Revalidate für die Daten. Szenario i und ii sind damit erfüllt, inklusive Filter und Entfernen einer Session ohne Netz. Chrome bietet die Installation an, die App startet im eigenen Fenster ohne Adressleiste.
+Getestet wurde der Produktions-Build von Hand in Chrome, nicht der Dev-Server, weil der Service Worker erst beim Build entsteht. Offline geschaltet wurde in den DevTools, im Service-Workers-Panel und im Network-Tab. Der Network-Tab zeigt, was tatsächlich passiert: Die Netzversuche des Service Workers für Seite und Daten schlagen fehl, die Seite bekommt beides trotzdem mit Status 200 aus dem Service Worker. Das entspricht den Regeln Network First für Seiten und Stale While Revalidate für die Daten. Szenario i und ii sind erfüllt, inklusive Filter und Entfernen einer Session ohne Netz. Chrome bietet die Installation an, die App startet im eigenen Fenster ohne Adressleiste.
 
-Lücken: Für Szenario iii fehlt ein gültiger Beleg, der erste Versuch war wegen eines zweiten offenen Tabs kein Erstbesuch. Ein Lighthouse-Audit liegt nicht bei. Das Manifest hat Warnungen: `purpose: "any maskable"` wird nicht empfohlen, und für den erweiterten Installier-Dialog fehlen Screenshots. Getestet wurde nur Chrome auf macOS gegen `localhost`, kein Handy, kein Safari, kein HTTPS. Der Einstieg über die Startseite in Szenario ii und Andreas Durchlauf stehen aus.
+In Szenario iii lädt ohne Service Worker nichts von FrontRow; Chrome zeigt seine eigene Offline-Seite.
+
+Lücken: Szenario iii lief auf einem Rechner, auf dem die App noch installiert war, deshalb „You're offline" statt der üblichen Fehlerseite. Ein Lighthouse-Audit liegt nicht bei. Das Manifest hat Warnungen: `purpose: "any maskable"` wird nicht empfohlen, und für den erweiterten Installier-Dialog fehlen Screenshots. Getestet wurde nur Chrome auf macOS gegen `localhost`, kein Handy, kein Safari, kein HTTPS. Der Einstieg über die Startseite in Szenario ii und Andreas Durchlauf stehen aus.

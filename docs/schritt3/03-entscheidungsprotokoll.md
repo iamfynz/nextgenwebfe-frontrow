@@ -1,6 +1,6 @@
 # 03 — Entscheidungsprotokoll: Offline und Caching
 
-Stand: 2026-11-15, Entwurf (Markus). Offen: Abstimmung mit Andrea, Andreas Testdurchlauf, Wiederholung von Szenario iii.
+Stand: 2026-11-15, Entwurf (Markus). Offen: Abstimmung mit Andrea, Andreas Testdurchlauf.
 Begründung je Datentyp: [02-offline-strategie-konzept.md](02-offline-strategie-konzept.md). Umsetzung: `app/service-worker/sw.ts`.
 
 ## Kontext
@@ -62,6 +62,6 @@ Markus' Durchlauf: 2026-11-15, Chrome 157.0.8103.78 (arm64) auf macOS, Build auf
 - **Ausgangslage:** Frisches Profil, App nie geöffnet, kein Service Worker installiert.
 - **Aktion:** Offline schalten, `/` aufrufen.
 - **Erwartung laut Regeln:** Browser-Fehlerseite. Ohne ersten Online-Kontakt gibt es weder Service Worker noch Cache; das kann eine Web-App nicht verhindern. Akzeptabel, weil die App vor der Konferenz (Ticket-Mail, Website) mindestens einmal online geöffnet wird.
-- **Beobachtet (Markus, 2026-11-15):** Erster Versuch ungültig. Nach „Clear site data" war die App noch in einem zweiten Tab offen; es installierte sich sofort ein neuer Service Worker, und die Startseite lud offline aus dem Cache. Das war damit kein Erstbesuch. Wiederholung mit geschlossenen Tabs steht aus.
+- **Beobachtet (Markus, 2026-11-15):** Ein erster Versuch war ungültig: Die App war noch in einem zweiten Tab offen, nach „Clear site data" installierte sich sofort ein neuer Service Worker und die Startseite lud offline. Wiederholung: Site-Daten gelöscht, der Service Worker steht auf „deleted" und „redundant", dann offline `http://localhost:3777/` aufgerufen. Von FrontRow lädt nichts. Chrome zeigt seine eingebaute Seite „You're offline" mit dem App-Icon, weil die App auf diesem Rechner noch installiert war. Ohne Installation wäre es die übliche Fehlerseite `ERR_INTERNET_DISCONNECTED`; das wurde nicht eigens getestet. Belege: [Ausgangslage](assets/s3-01-ausgangslage-sw-geloescht.png), [Aufruf offline](assets/s3-02-erstbesuch-offline.png).
 - **Beobachtet (Andrea):** _noch einzutragen_
-- **Ergebnis:** Offen. Erwartet wird die Browser-Fehlerseite; wir akzeptieren das als Grenzfall, weil auch eine Offline-Seite erst geladen werden müsste.
+- **Ergebnis:** Wie erwartet nicht nutzbar. Wir akzeptieren das als Grenzfall, weil auch eine eigene Offline-Seite erst einmal geladen werden müsste. Andreas Durchlauf steht noch aus.
