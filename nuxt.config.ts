@@ -17,6 +17,8 @@ export default defineNuxtConfig({
     buildSW: {
       swSrc: 'app/service-worker/sw.ts',
       globPatterns: ['**/*.{js,css,png,svg,ico,webmanifest}'],
+      // Vorlage für die PNG-Icons, wird zur Laufzeit nirgends geladen.
+      globIgnores: ['**/icon-source.svg'],
     },
   },
 
