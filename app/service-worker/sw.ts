@@ -2,7 +2,7 @@
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { clientsClaim } from 'workbox-core'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
-import { warmStrategyCache } from 'workbox-recipes'
+import { googleFontsCache, warmStrategyCache } from 'workbox-recipes'
 import { registerRoute } from 'workbox-routing'
 import { NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies'
 
@@ -21,6 +21,12 @@ clientsClaim()
 // vollständig im Cache und nicht erst, wenn eine Seite sie zufällig angefordert hat.
 precacheAndRoute(self.__WB_MANIFEST)
 cleanupOutdatedCaches()
+
+// --- Schriften (Google Fonts): Cache First für die Font-Dateien, SWR für das Stylesheet -----
+// Inter und Science Gothic kommen von fonts.googleapis.com / fonts.gstatic.com, liegen also nicht
+// in der Precache-Liste. Lücke: Greift erst ab dem zweiten Seitenaufruf, weil der Service Worker
+// beim allerersten Laden noch nicht aktiv ist, wenn der Browser die Schriften anfordert.
+googleFontsCache({ cachePrefix: 'frontrow-fonts' })
 
 // --- Seiten (HTML-Dokumente): Network First mit Zeitlimit, sonst Cache, sonst App-Shell ----
 // Betrifft nur echte Dokument-Requests (Erstaufruf, Neuladen, Start der installierten App). Klicks
