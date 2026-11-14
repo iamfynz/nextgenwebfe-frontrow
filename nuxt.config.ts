@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
+  devtools: { enabled: false },
 
   // Rendering-Strategie pro Anwendungsteil: docs/schritt2/01-rendering-strategie-adr.md
   // Alles ohne Regel ist SSR (Session-Detail, Speaker-Übersicht, Speaker-Profil, Startseite).
@@ -37,6 +37,14 @@ export default defineNuxtConfig({
       title: 'FrontRow — FrontendNow 2026',
       meta: [
         { name: 'description', content: 'FrontRow: dein Platz in der ersten Reihe der FrontendNow 2026 in Wien.' },
+        { name: 'theme-color', content: '#102928' },
+        { name: 'mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+      ],
+      link: [
+        { rel: 'manifest', href: '/manifest.webmanifest' },
+        { rel: 'apple-touch-icon', href: '/icons/icon-192.png' },
       ],
     },
   },
