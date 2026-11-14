@@ -37,10 +37,15 @@ registerRoute(
 // --- Sessions-/Speaker-Daten (Person 2, C): Stale While Revalidate ------------------------
 // Alle Programmdaten kommen aus dieser einen JSON-Route (useConferenceData).
 const CONFERENCE_DATA_URL = '/api/conference-data'
+const conferenceDataStrategy = new StaleWhileRevalidate({
+  cacheName: 'frontrow-data',
+  plugins: [new CacheableResponsePlugin({ statuses: [200] })],
+})
+// Schon bei der Installation laden: Auf SSR-Seiten stecken die Daten im HTML-Payload, der Browser
+// ruft die Route dann gar nicht ab. Ohne dieses Vorwärmen wäre der Daten-Cache nach einem Einstieg
+// über die Startseite leer und „Mein Programm" könnte offline keine Session auflösen.
+warmStrategyCache({ urls: [CONFERENCE_DATA_URL], strategy: conferenceDataStrategy })
 registerRoute(
   ({ url, sameOrigin }) => sameOrigin && url.pathname === CONFERENCE_DATA_URL,
-  new StaleWhileRevalidate({
-    cacheName: 'frontrow-data',
-    plugins: [new CacheableResponsePlugin({ statuses: [200] })],
-  }),
+  conferenceDataStrategy,
 )
