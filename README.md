@@ -114,7 +114,8 @@ docs/schritt3/                     PWA-Setup, Offline-Konzept, Entscheidungsprot
 | Schritt 2 F | [AI-LOG Windisch](docs/schritt2/AI-LOG-Windisch.md) · [AI-LOG Vogl](docs/schritt2/AI-LOG-Vogl.md) |
 | Schritt 3 A | [PWA-Setup](docs/schritt3/01-pwa-setup.md) |
 | Schritt 3 B | [Offline-Strategie: Konzept](docs/schritt3/02-offline-strategie-konzept.md) |
-| Schritt 3 D | [Entscheidungsprotokoll](docs/schritt3/03-entscheidungsprotokoll.md) (Entwurf, Testergebnisse offen) |
+| Schritt 3 D | [Entscheidungsprotokoll](docs/schritt3/03-entscheidungsprotokoll.md) (Andreas Testdurchlauf und Szenario iii offen) |
+| Schritt 3 E | [Verifikations-Nachweis](docs/schritt3/04-verifikations-nachweis.md) |
 | Schritt 3 | [AI-LOG Vogl](docs/schritt3/AI-LOG-Vogl.md) |
 
 ## Aufgabenteilung Schritt 2
