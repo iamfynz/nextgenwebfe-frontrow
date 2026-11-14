@@ -5,6 +5,6 @@ FrontRow registriert den Service Worker manuell über ein eigenes Client-Plugin.
 ## Caching-Zuordnung
 
 - **Precache (Cache First):** Nuxt-Bundles, CSS, Manifest, Icons und Favicon aus der Build-Liste von Workbox.
-- **Network First (3 s Zeitlimit), sonst Cache, sonst App-Shell:** alle HTML-Seiten. Startseite und App-Shell (`/mein-programm`) liegen ab der Installation im Cache.
+- **Network First (3 s Zeitlimit), sonst Cache, sonst App-Shell:** alle HTML-Seiten. Startseite und App-Shell (`/mein-programm`) liegen ab der Installation im Cache. Serverfehler (5xx) zählen wie Netzfehler.
 - **Stale While Revalidate:** `/api/conference-data`, da alle dynamischen Sessions-/Speaker-Inhalte aus dieser JSON-basierten Route stammen. Wird bei der Installation vorgeladen.
 - **Google Fonts:** Cache First für die Font-Dateien, Stale While Revalidate für das Stylesheet.

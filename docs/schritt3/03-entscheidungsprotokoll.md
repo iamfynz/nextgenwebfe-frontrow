@@ -1,6 +1,6 @@
 # 03 — Entscheidungsprotokoll: Offline und Caching
 
-Stand: 2026-11-15, Entwurf (Markus). Offen: Abstimmung mit Andrea, Andreas Testdurchlauf.
+Stand: 2026-11-15, Entwurf (Markus), nach Code-Review ergänzt. Offen: Abstimmung mit Andrea, Andreas Testdurchlauf.
 Begründung je Datentyp: [02-offline-strategie-konzept.md](02-offline-strategie-konzept.md). Umsetzung: `app/service-worker/sw.ts`.
 
 ## Kontext
@@ -27,10 +27,12 @@ FrontRow wird auf der Konferenz bei überlastetem WLAN und im Flugmodus zwischen
 
 ## Konsequenzen
 
-- Nach einem einzigen Online-Besuch sind alle Routen offline erreichbar, auch nie geöffnete Detailseiten.
+- Nach einem einzigen Online-Besuch sind alle Routen offline erreichbar, auch nie geöffnete Detailseiten. Voraussetzung: Die Installation ist durchgelaufen. Lassen sich Startseite, App-Shell oder Programmdaten dabei nicht laden, scheitert sie als Ganzes und wird beim nächsten Seitenaufruf wiederholt; bis dahin gibt es keinen Offline-Betrieb.
 - Eine Raumänderung ist erst beim zweiten Laden nach der Änderung sichtbar; offline bleibt der letzte Stand ohne Hinweis stehen.
 - Bei sehr langsamem Netz wartet ein Seitenaufruf bis zu 3 Sekunden, bevor der Cache antwortet.
-- Zwei zusätzliche Build-Abhängigkeiten; der Service Worker existiert nur im Build, nicht im Dev-Server.
+- Antwortet der Server mit einem Fehler (5xx), zeigt die App die zuletzt gecachte Seite statt der Fehlerseite.
+- Ein neuer Build aktiviert sich sofort (`skipWaiting`, `clientsClaim`) und verwirft gecachte Seiten des alten Builds bis auf Startseite und App-Shell. Updates kommen damit schnell an. Preis: In einem Tab, der beim Update offen war, kann offline ein noch nicht geladener Seitenteil fehlen, bis neu geladen wird.
+- Sieben zusätzliche Dev-Abhängigkeiten (`@vite-pwa/nuxt` und sechs Workbox-Pakete); der Service Worker existiert nur im Build, nicht im Dev-Server.
 - Schriften können offline fehlen, wenn die App erst einmal geladen wurde: Der Service Worker cacht sie erst ab dem zweiten Aufruf. In Markus' Durchlauf kamen sie aus dem Disk-Cache des Browsers.
 
 ## Testszenarien
