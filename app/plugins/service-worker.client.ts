@@ -1,5 +1,6 @@
 export default defineNuxtPlugin(() => {
-  if (!('serviceWorker' in navigator)) return
+  // /sw.js entsteht erst beim Build (app/service-worker/sw.ts); im Dev-Server gibt es die Datei nicht.
+  if (import.meta.dev || !('serviceWorker' in navigator)) return
 
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch((error: unknown) => {
