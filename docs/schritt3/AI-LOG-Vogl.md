@@ -27,9 +27,3 @@ Live mitgeschrieben während der Arbeit, ein Eintrag pro Prompt. Tool durchgehen
 - **Prompt (gekürzt):** „Mach jetzt bitte nochmal ein Code Review über den Branch und gegen die Angabe"
 - **Zweck:** Unabhängige zweite Lesung von `feature/offline-caching` gegen `main` vor Andreas Cross-Review, dazu Abgleich der vier Dokumente mit der Angabe (Wortzahlen, Struktur, Belege, Links).
 - **Ergebnis:** Gegen die Angabe formal vollständig, offen sind nur Andreas Durchlauf und die gemeinsame Entscheidung zu B. Das Review brachte zehn Punkte, die wichtigsten: Gecachtes HTML in `frontrow-pages` überlebt einen neuen Build und verweist dann auf gelöschte Bundles. Das Vorladen bei der Installation schluckt Fehler, der Service Worker kann also ohne App-Shell oder Daten aktiv werden. Ein HTTP-500 vom Server wird durchgereicht, obwohl eine gute Kopie im Cache liegt. Das Protokoll nennt zwei neue Abhängigkeiten, es sind sieben. Acht der zehn Punkte sind danach in einzelnen Commits behoben; `skipWaiting` und die Google-Schriften bleiben als dokumentierte Abwägung bzw. Lücke.
-
-### Eintrag 4
-
-- **Tool:** Codex
-- **Zweck:** Andreas Cross-Review abschließen, Manifest-Warnung beheben und den unabhängigen Testdurchlauf dokumentieren.
-- **Ergebnis:** Network First für HTML wurde als gemeinsame Entscheidung bestätigt. Das Manifest führt für beide Icongrößen getrennte Einträge mit `purpose: "any"` und `purpose: "maskable"`; die frühere Chrome-Warnung ist damit behoben. Andrea hat die drei Offline-Szenarien unabhängig durchgeführt und mit je einem Screenshot belegt. Die Belege sind im Entscheidungsprotokoll und im Verifikations-Nachweis verlinkt. Die offenen Punkte aus Eintrag 3 sind damit abgeschlossen; die verbleibenden Hinweise zu Google Fonts und Erstbesuch offline sind bewusst dokumentierte Grenzen der Strategie.

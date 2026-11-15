@@ -20,7 +20,7 @@ Deliverables S3:    docs/schritt3/01-pwa-setup.md                 (A: Setup-Noti
                     docs/schritt3/03-entscheidungsprotokoll.md    (D: Protokoll + 3 Testszenarien)
                     docs/schritt3/04-verifikations-nachweis.md    (E: Nachweis + Einordnung)
                     docs/schritt3/assets/                         (DevTools-Screenshots der Testläufe)
-                    docs/schritt3/AI-LOG-Vogl.md
+                    docs/schritt3/AI-LOG-Windisch.md, AI-LOG-Vogl.md
                     public/manifest.webmanifest, public/icons/    (A)
                     app/plugins/service-worker.client.ts          (A: Registrierung)
                     app/service-worker/sw.ts                      (C: Caching-Regeln, Workbox)
