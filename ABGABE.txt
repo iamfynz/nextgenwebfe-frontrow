@@ -11,16 +11,16 @@ Teammitglieder:     Markus Vogl     (markusvogl@outlook.at)
 
 Repository:         https://github.com/iamfynz/nextgenwebfe-frontrow
 Branch:             main
-Abgabe-Stand:       Schritt 3 umgesetzt: Offline-Strategie, Cross-Review und beide Testdurchläufe abgeschlossen
+Abgabe-Stand:       main, 2026-11-15 (Schritt 3: Offline-Strategie, Cross-Review und beide Testdurchläufe abgeschlossen)
 Schritt-3-PRs:      https://github.com/iamfynz/nextgenwebfe-frontrow/pull/4  (Manifest, Icons, erster Service Worker; gemerged)
                     https://github.com/iamfynz/nextgenwebfe-frontrow/pull/5  (Workbox, Offline-Lücken, Dokumente; gemerged)
-                    https://github.com/iamfynz/nextgenwebfe-frontrow/pull/6  (Manifest-Icons, Andreas Testdurchlauf, Cross-Review)
+                    https://github.com/iamfynz/nextgenwebfe-frontrow/pull/6  (Manifest-Icons, Andreas Testdurchlauf, Cross-Review; gemerged)
 
 Deliverables S3:    docs/schritt3/01-pwa-setup.md                 (A: Setup-Notiz)
                     docs/schritt3/02-offline-strategie-konzept.md (B: Konzept je Datentyp)
                     docs/schritt3/03-entscheidungsprotokoll.md    (D: Protokoll + 3 Testszenarien)
                     docs/schritt3/04-verifikations-nachweis.md    (E: Nachweis + Einordnung)
-                    docs/schritt3/assets/                         (DevTools-Screenshots der Testläufe)
+                    docs/schritt3/assets/                         (DevTools-Screenshots der Testläufe, Lighthouse-Auszug)
                     docs/schritt3/AI-LOG-Windisch.md, AI-LOG-Vogl.md
                     public/manifest.webmanifest, public/icons/    (A)
                     app/plugins/service-worker.client.ts          (A: Registrierung)
