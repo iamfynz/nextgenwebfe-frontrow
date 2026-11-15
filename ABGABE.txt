@@ -11,16 +11,17 @@ Teammitglieder:     Markus Vogl     (markusvogl@outlook.at)
 
 Repository:         https://github.com/iamfynz/nextgenwebfe-frontrow
 Branch:             main
-Abgabe-Stand:       Schritt 3 in Arbeit: Branch feature/offline-caching, PR #5 (Cross-Review Andrea offen)
+Abgabe-Stand:       Schritt 3 umgesetzt: Offline-Strategie, Cross-Review und beide Testdurchläufe abgeschlossen
 Schritt-3-PRs:      https://github.com/iamfynz/nextgenwebfe-frontrow/pull/4  (Manifest, Icons, erster Service Worker; gemerged)
-                    https://github.com/iamfynz/nextgenwebfe-frontrow/pull/5  (Workbox, Offline-Lücken, Dokumente)
+                    https://github.com/iamfynz/nextgenwebfe-frontrow/pull/5  (Workbox, Offline-Lücken, Dokumente; gemerged)
+                    https://github.com/iamfynz/nextgenwebfe-frontrow/pull/6  (Manifest-Icons, Andreas Testdurchlauf, Cross-Review)
 
 Deliverables S3:    docs/schritt3/01-pwa-setup.md                 (A: Setup-Notiz)
                     docs/schritt3/02-offline-strategie-konzept.md (B: Konzept je Datentyp)
                     docs/schritt3/03-entscheidungsprotokoll.md    (D: Protokoll + 3 Testszenarien)
                     docs/schritt3/04-verifikations-nachweis.md    (E: Nachweis + Einordnung)
                     docs/schritt3/assets/                         (DevTools-Screenshots der Testläufe)
-                    docs/schritt3/AI-LOG-Vogl.md
+                    docs/schritt3/AI-LOG-Windisch.md, AI-LOG-Vogl.md
                     public/manifest.webmanifest, public/icons/    (A)
                     app/plugins/service-worker.client.ts          (A: Registrierung)
                     app/service-worker/sw.ts                      (C: Caching-Regeln, Workbox)
@@ -34,7 +35,7 @@ Schritt 1:          docs/schritt1/ (A–D, AI-LOG.md), tokens/tokens.css
 
 Aufgabenteilung S3: Andrea Windisch  A (Manifest, Icons, SW-Registrierung), erster Service Worker
                     Markus Vogl      C (Umstieg auf Workbox, Daten- und Seiten-Caching), E, Entwürfe B + D
-                    B gemeinsam zu entscheiden; D: Entwurf Markus, Ergänzung und zweiter Testdurchlauf Andrea.
+                    B gemeinsam entschieden; D: Entwurf Markus, Ergänzung und zweiter Testdurchlauf Andrea.
 Aufgabenteilung S2: Andrea B + C, Markus D + E + Laufzeit-Datenquelle (Abweichung im ADR-Nachtrag begründet).
 
 Routen:             /programm · /programm/[id] · /speakers · /speakers/[id] · /mein-programm
