@@ -44,9 +44,30 @@ Arbeitsverzeichnis des Server-Prozesses, deshalb aus dem Projektroot starten.
 **Mein Programm.** Persistiert werden nur Session-IDs unter `frontrow:my-program:v1` in `localStorage` (Konzept C).
 Rehydration einmalig in `onMounted`, bis dahin sind die Merken-Buttons deaktiviert. Nach einem Reload bleibt die Auswahl erhalten.
 
+## PWA und Offline (Schritt 3)
+
+Die App ist installierbar und nach einem Online-Besuch offline nutzbar. Der Service Worker entsteht erst beim Build
+(`app/service-worker/sw.ts` → `/sw.js`), im Dev-Server ist er nicht aktiv. Offline testen deshalb so:
+
+```sh
+npm run build
+node .output/server/index.mjs   # aus dem Projektroot, http://localhost:3000
+```
+
+Dann in Chrome einmal laden, DevTools → Network → „Offline" und neu laden.
+
+| Datentyp | Strategie |
+|---|---|
+| Nuxt-Bundles, CSS, Icons, Manifest | Precache (Cache First) |
+| `/api/conference-data` | Stale While Revalidate, bei Installation vorgeladen |
+| Seiten (HTML) | Network First mit 3 s Zeitlimit, sonst Cache, sonst App-Shell |
+| Google Fonts | Cache First (Dateien), Stale While Revalidate (Stylesheet) |
+
+Begründung: [Konzept](docs/schritt3/02-offline-strategie-konzept.md) und [Entscheidungsprotokoll](docs/schritt3/03-entscheidungsprotokoll.md).
+
 ## Stack
 
-Nuxt 4 · Vue 3 · TypeScript · Tailwind CSS v4
+Nuxt 4 · Vue 3 · TypeScript · Tailwind CSS v4 · Workbox (über `@vite-pwa/nuxt`)
 
 ## Struktur
 
@@ -65,14 +86,19 @@ app/                      ← Quellcode (Nuxt-4-Konvention; entspricht /src der 
 │   ├── useSpeakers       Domänenschicht: Speaker mit Sessions aufgelöst
 │   ├── useSessionFilter  Headless-Filterlogik (Track, Tag, Level, UND-verknüpft)
 │   └── useMyProgram      Persönlicher State, localStorage, Rehydration
+├── plugins/              service-worker.client: registriert /sw.js (nur im Build)
+├── service-worker/sw.ts  Service Worker mit den Caching-Regeln (Workbox)
 ├── pages/                index, programm/, programm/[id], speakers/, speakers/[id], mein-programm
 ├── utils/formatDay.ts
 └── types/conference.ts
 server/api/conference-data.get.ts  liest den Datensatz pro Request (SSR-Simulation)
 tokens/tokens.css
 public/data/conference-data.json   geteilter, schreibgeschützter Datensatz
+public/manifest.webmanifest        Web App Manifest
+public/icons/                      App-Icons 192 und 512
 docs/schritt1/                     Deliverables Schritt 1 (A–D), AI-LOG Schritt 1
 docs/schritt2/                     Rendering-ADR, AI-LOGs
+docs/schritt3/                     PWA-Setup, Offline-Konzept, Entscheidungsprotokoll, AI-LOG
 ```
 
 ## Dokumente
@@ -86,6 +112,11 @@ docs/schritt2/                     Rendering-ADR, AI-LOGs
 | Schritt 1 | [AI-LOG Schritt 1 (Team)](docs/schritt1/AI-LOG.md) |
 | Schritt 2 A | [ADR Rendering-Strategie](docs/schritt2/01-rendering-strategie-adr.md) |
 | Schritt 2 F | [AI-LOG Windisch](docs/schritt2/AI-LOG-Windisch.md) · [AI-LOG Vogl](docs/schritt2/AI-LOG-Vogl.md) |
+| Schritt 3 A | [PWA-Setup](docs/schritt3/01-pwa-setup.md) |
+| Schritt 3 B | [Offline-Strategie: Konzept](docs/schritt3/02-offline-strategie-konzept.md) |
+| Schritt 3 D | [Entscheidungsprotokoll](docs/schritt3/03-entscheidungsprotokoll.md) (Andreas Testdurchlauf und Szenario iii offen) |
+| Schritt 3 E | [Verifikations-Nachweis](docs/schritt3/04-verifikations-nachweis.md) |
+| Schritt 3 | [AI-LOG Vogl](docs/schritt3/AI-LOG-Vogl.md) |
 
 ## Aufgabenteilung Schritt 2
 
@@ -96,7 +127,7 @@ ADR-Punkte entsprechend; Cross-Review und Klick-Test jeweils durch die andere Pe
 ## Tooling-Notizen
 
 - TypeScript ist auf 5.x gepinnt, weil `vue-tsc` TypeScript 7 noch nicht unterstützt.
-- Science Gothic und Inter werden derzeit über Google Fonts geladen; lokales Hosting wird mit dem Offline-Ziel in Schritt 3 entschieden.
+- Science Gothic und Inter werden derzeit über Google Fonts geladen; der Service Worker cacht sie ab dem zweiten Seitenaufruf (Schritt 3). Lokales Hosting würde die Lücke beim ersten Aufruf schließen und ist noch offen.
 - Kein Pinia, kein VueUse: Begründung in [ADR D](docs/schritt1/04-technologie-adr.md) und [Konzept C](docs/schritt1/03-state-management-konzept.md).
 
 ## Konventionen

@@ -5,6 +5,23 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: false },
 
+  // PWA (Schritt 3): Der Service Worker wird aus app/service-worker/sw.ts gebaut (Workbox, buildSW)
+  // und als /sw.js ausgeliefert. Manifest und Registrierung bleiben eigene Dateien:
+  // public/manifest.webmanifest und app/plugins/service-worker.client.ts.
+  modules: ['@vite-pwa/nuxt'],
+  pwa: {
+    strategies: 'buildSW',
+    filename: 'sw.js',
+    manifest: false,
+    injectRegister: false,
+    buildSW: {
+      swSrc: 'app/service-worker/sw.ts',
+      globPatterns: ['**/*.{js,css,png,svg,ico,webmanifest}'],
+      // Vorlage für die PNG-Icons, wird zur Laufzeit nirgends geladen.
+      globIgnores: ['**/icon-source.svg'],
+    },
+  },
+
   // Rendering-Strategie pro Anwendungsteil: docs/schritt2/01-rendering-strategie-adr.md
   // Alles ohne Regel ist SSR (Session-Detail, Speaker-Übersicht, Speaker-Profil, Startseite).
   routeRules: {

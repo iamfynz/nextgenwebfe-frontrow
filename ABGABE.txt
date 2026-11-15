@@ -2,8 +2,8 @@ Abgabe – Next Generation Web Frontends
 ======================================
 
 Lehrveranstaltung:  Next Generation Web Frontends (FH Technikum Wien, LV-Leitung Helmuth Lammer)
-Assignment:         04c Team Assignment – Projektarbeit
-Aktueller Stand:    Schritt 2: Rendering-Strategie & Kernfunktionen
+Assignment:         05b Team Assignment – Projektarbeit
+Aktueller Stand:    Schritt 3: PWA & Offline-Strategie (gemeinsame Bewertung mit Schritt 2)
 
 Team:               FrontRow
 Teammitglieder:     Markus Vogl     (markusvogl@outlook.at)
@@ -11,31 +11,35 @@ Teammitglieder:     Markus Vogl     (markusvogl@outlook.at)
 
 Repository:         https://github.com/iamfynz/nextgenwebfe-frontrow
 Branch:             main
-Abgabe-Stand:       main, 2026-11-01 (Schritt-2-Inhalt bis Commit 3db21aa, diese Datei danach ergänzt)
-Schritt-2-PR:       https://github.com/iamfynz/nextgenwebfe-frontrow/pull/3  (gemerged)
+Abgabe-Stand:       Schritt 3 in Arbeit: Branch feature/offline-caching, PR #5 (Cross-Review Andrea offen)
+Schritt-3-PRs:      https://github.com/iamfynz/nextgenwebfe-frontrow/pull/4  (Manifest, Icons, erster Service Worker; gemerged)
+                    https://github.com/iamfynz/nextgenwebfe-frontrow/pull/5  (Workbox, Offline-Lücken, Dokumente)
 
-Deliverables:       docs/schritt2/01-rendering-strategie-adr.md   (A: Rendering-ADR, 4 Entscheidungspunkte + Nachtrag)
-                    docs/schritt2/AI-LOG-Windisch.md             (F)
-                    docs/schritt2/AI-LOG-Vogl.md                 (F)
-                    app/                                         (B–E, entspricht /src)
-                      pages/programm/index.vue   Session-Übersicht + Filter (B, CSR)
-                      pages/programm/[id].vue    Session-Detailseiten (C, SSR)
-                      pages/speakers/            Speaker-Übersicht + Profile (D, SSR)
-                      pages/mein-programm.vue    Mein Programm (E, CSR, localStorage)
-                      composables/               useConferenceData (Datenschicht), useSessions,
-                                                 useSpeakers, useSessionFilter, useMyProgram
-                    server/api/conference-data.get.ts            (Datensatz pro Request, SSR-Simulation)
-                    nuxt.config.ts                               (routeRules: Rendering pro Route)
-                    README.md                                    (Setup, Rendering pro Route, SSR-Simulation)
+Deliverables S3:    docs/schritt3/01-pwa-setup.md                 (A: Setup-Notiz)
+                    docs/schritt3/02-offline-strategie-konzept.md (B: Konzept je Datentyp)
+                    docs/schritt3/03-entscheidungsprotokoll.md    (D: Protokoll + 3 Testszenarien)
+                    docs/schritt3/04-verifikations-nachweis.md    (E: Nachweis + Einordnung)
+                    docs/schritt3/assets/                         (DevTools-Screenshots der Testläufe)
+                    docs/schritt3/AI-LOG-Vogl.md
+                    public/manifest.webmanifest, public/icons/    (A)
+                    app/plugins/service-worker.client.ts          (A: Registrierung)
+                    app/service-worker/sw.ts                      (C: Caching-Regeln, Workbox)
+                    nuxt.config.ts                                (pwa: Build des Service Workers)
+
+Schritt 2:          main bis Commit 3db21aa, PR https://github.com/iamfynz/nextgenwebfe-frontrow/pull/3 (gemerged)
+                    docs/schritt2/01-rendering-strategie-adr.md, AI-LOG-Windisch.md, AI-LOG-Vogl.md
+                    app/pages, app/composables, server/api/conference-data.get.ts
 
 Schritt 1:          docs/schritt1/ (A–D, AI-LOG.md), tokens/tokens.css
 
-Aufgabenteilung:    Andrea Windisch  B (Übersicht + Filter), C (Detailseiten), ADR-Punkte B + C
-                    Markus Vogl      D (Speaker-Profile), E (Mein Programm), Laufzeit-Datenquelle, ADR-Punkte D + E
-                    Abweichung von der Angabe (B+D / C+E) im ADR-Nachtrag begründet; Cross-Review wechselseitig.
+Aufgabenteilung S3: Andrea Windisch  A (Manifest, Icons, SW-Registrierung), erster Service Worker
+                    Markus Vogl      C (Umstieg auf Workbox, Daten- und Seiten-Caching), E, Entwürfe B + D
+                    B gemeinsam zu entscheiden; D: Entwurf Markus, Ergänzung und zweiter Testdurchlauf Andrea.
+Aufgabenteilung S2: Andrea B + C, Markus D + E + Laufzeit-Datenquelle (Abweichung im ADR-Nachtrag begründet).
 
 Routen:             /programm · /programm/[id] · /speakers · /speakers/[id] · /mein-programm
 
 Start:              npm install
                     npm run dev   →  http://localhost:3000
                     Production:   npm run build && node .output/server/index.mjs  (aus dem Projektroot)
+                    Offline-Test: nur im Production-Build, der Service Worker ist im Dev-Server nicht aktiv
