@@ -1,7 +1,7 @@
 # 04 — Verifikations-Nachweis
 
 Stand: 2026-11-15 (Markus). Bezug: Szenarien i–iii in [03-entscheidungsprotokoll.md](03-entscheidungsprotokoll.md).
-Umgebung: Chrome 157.0.8103.78 (arm64), macOS, Produktions-Build auf `http://localhost:3777`.
+Umgebung Markus: Chrome 157.0.8103.78 (arm64), macOS, Produktions-Build auf `http://localhost:3777`. Umgebung Andrea: Brave auf macOS, Version nicht festgehalten, gleicher Build und Port.
 
 ## Belege je Szenario
 
@@ -56,4 +56,4 @@ Getestet wurde der Produktions-Build von Hand in Chrome, weil der Service Worker
 
 In Szenario iii lädt ohne Service Worker nichts von FrontRow; Chrome zeigt seine eigene Offline-Seite.
 
-Lücken: Szenario iii lief in Markus' Durchlauf auf einem Rechner, auf dem die App noch installiert war, deshalb „You're offline" statt der üblichen Fehlerseite. Das Lighthouse-Audit lief mit der alten Version 11.7.1, weil Chrome 157 die PWA-Kategorie nicht mehr anbietet; es besteht alle sechs automatischen Prüfungen. Für den erweiterten Installier-Dialog fehlen Manifest-Screenshots. Getestet wurde nur Chrome auf macOS gegen `localhost`, kein Handy, kein Safari, kein HTTPS. Andreas unabhängiger Durchlauf bestätigte die drei Szenarien.
+Lücken: Szenario iii lief in Markus' Durchlauf auf einem Rechner, auf dem die App noch installiert war, deshalb „You're offline" statt der üblichen Fehlerseite. Das Lighthouse-Audit lief mit der alten Version 11.7.1, weil Chrome 157 die PWA-Kategorie nicht mehr anbietet; es besteht alle sechs automatischen Prüfungen. Für den erweiterten Installier-Dialog fehlen Manifest-Screenshots. Getestet wurden nur Chrome und Brave auf macOS gegen `localhost`, kein Handy, kein Safari, kein HTTPS. Andreas Durchlauf in Brave bestätigte die drei Szenarien; dort fehlte offline das Font-Stylesheet.
