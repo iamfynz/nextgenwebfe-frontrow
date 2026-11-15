@@ -1,6 +1,6 @@
 # 03 — Entscheidungsprotokoll: Offline und Caching
 
-Stand: 2026-11-15, Entwurf Markus, von Andrea cross-reviewt und durch einen unabhängigen Testdurchlauf ergänzt.
+Stand: 2026-11-15. Erster Entwurf von Markus, von Andrea cross-reviewt und um ihren unabhängigen Testdurchlauf ergänzt.
 Begründung je Datentyp: [02-offline-strategie-konzept.md](02-offline-strategie-konzept.md). Umsetzung: `app/service-worker/sw.ts`.
 
 ## Kontext
@@ -33,7 +33,7 @@ FrontRow wird auf der Konferenz bei überlastetem WLAN und im Flugmodus zwischen
 - Antwortet der Server mit einem Fehler (5xx), zeigt die App die zuletzt gecachte Seite statt der Fehlerseite.
 - Ein neuer Build aktiviert sich sofort (`skipWaiting`, `clientsClaim`) und verwirft gecachte Seiten des alten Builds bis auf Startseite und App-Shell. Updates kommen damit schnell an. Preis: In einem Tab, der beim Update offen war, kann offline ein noch nicht geladener Seitenteil fehlen, bis neu geladen wird.
 - Sieben zusätzliche Dev-Abhängigkeiten (`@vite-pwa/nuxt` und sechs Workbox-Pakete); der Service Worker existiert nur im Build, nicht im Dev-Server.
-- Schriften können offline fehlen, wenn die App erst einmal geladen wurde: Der Service Worker cacht sie erst ab dem zweiten Aufruf. In Markus' Durchlauf kamen sie aus dem Disk-Cache des Browsers.
+- Schriften können offline fehlen, wenn die App erst einmal geladen wurde: Der Service Worker cacht sie erst ab dem zweiten Aufruf. In Markus' Durchlauf kamen sie aus dem Disk-Cache des Browsers. In Andreas Durchlauf schlug der Abruf des Font-Stylesheets offline fehl ([Beleg](assets/s1-andrea-offline-programm.png), rote Zeilen im Network-Tab).
 
 ## Testszenarien
 
@@ -64,6 +64,6 @@ Markus' Durchlauf: 2026-11-15, Chrome 157.0.8103.78 (arm64) auf macOS, Build auf
 - **Ausgangslage:** Frisches Profil, App nie geöffnet, kein Service Worker installiert.
 - **Aktion:** Offline schalten, `/` aufrufen.
 - **Erwartung laut Regeln:** Browser-Fehlerseite. Ohne ersten Online-Kontakt gibt es weder Service Worker noch Cache; das kann eine Web-App nicht verhindern. Akzeptabel, weil die App vor der Konferenz (Ticket-Mail, Website) mindestens einmal online geöffnet wird.
-- **Beobachtet (Markus, 2026-11-15):** Ein erster Versuch war ungültig: Die App war noch in einem zweiten Tab offen, nach „Clear site data" installierte sich sofort ein neuer Service Worker und die Startseite lud offline. Wiederholung: Site-Daten gelöscht, der Service Worker steht auf „deleted" und „redundant", dann offline `http://localhost:3777/` aufgerufen. Von FrontRow lädt nichts. Chrome zeigt seine eingebaute Seite „You're offline" mit dem App-Icon, weil die App auf diesem Rechner noch installiert war. Ohne Installation wäre es die übliche Fehlerseite `ERR_INTERNET_DISCONNECTED`; das wurde nicht eigens getestet. Belege: [Ausgangslage](assets/s3-01-ausgangslage-sw-geloescht.png), [Aufruf offline](assets/s3-02-erstbesuch-offline.png).
+- **Beobachtet (Markus, 2026-11-15):** Ein erster Versuch war ungültig: Die App war noch in einem zweiten Tab offen, nach „Clear site data" installierte sich sofort ein neuer Service Worker und die Startseite lud offline. Wiederholung: Site-Daten gelöscht, der Service Worker steht auf „deleted" und „redundant", dann offline `http://localhost:3777/` aufgerufen. Von FrontRow lädt nichts. Chrome zeigt seine eingebaute Seite „You're offline" mit dem App-Icon, weil die App auf diesem Rechner noch installiert war. Ohne Installation ist es die übliche Fehlerseite `ERR_INTERNET_DISCONNECTED`; das zeigt Andreas Durchlauf. Belege: [Ausgangslage](assets/s3-01-ausgangslage-sw-geloescht.png), [Aufruf offline](assets/s3-02-erstbesuch-offline.png).
 - **Beobachtet (Andrea, 2026-11-15):** Nach dem Löschen der Site-Daten und ohne aktiven Service Worker war die App im Offline-Modus nicht erreichbar; Chrome zeigte die erwartete Offline-Fehlerseite. Beleg: [Erstbesuch offline](assets/s3-andrea-erstbesuch-offline.png).
 - **Ergebnis:** Wie erwartet nicht nutzbar. Wir akzeptieren das als Grenzfall, weil auch eine eigene Offline-Seite erst einmal geladen werden müsste.
