@@ -2,6 +2,7 @@
 
 Stand: 2026-11-15. Erster Entwurf von Markus, von Andrea cross-reviewt und um ihren unabhängigen Testdurchlauf ergänzt.
 Begründung je Datentyp: [02-offline-strategie-konzept.md](02-offline-strategie-konzept.md). Umsetzung: `app/service-worker/sw.ts`.
+Die Rendering-Entscheidungen aus Schritt 2, auf denen dieses Protokoll aufbaut, stehen in der [Rendering-ADR](../schritt2/01-rendering-strategie-adr.md).
 
 ## Kontext
 
