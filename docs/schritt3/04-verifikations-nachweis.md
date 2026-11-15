@@ -52,7 +52,7 @@ Umgebung Markus: Chrome 157.0.8103.78 (arm64), macOS, Produktions-Build auf `htt
 
 ## Einordnung
 
-Getestet wurde der Produktions-Build von Hand in Chrome, weil der Service Worker erst beim Build entsteht. Offline geschaltet wurde in den DevTools. Der Network-Tab zeigt, was tatsächlich passiert: Die Netzversuche des Service Workers für Seite und Daten schlagen fehl, die Seite bekommt beides trotzdem mit Status 200 aus dem Service Worker. Das entspricht den Regeln Network First für Seiten und Stale While Revalidate für die Daten. Szenario i und ii sind erfüllt, inklusive Filter und Entfernen einer Session ohne Netz. Chrome bietet die Installation an, die App startet im eigenen Fenster ohne Adressleiste.
+Getestet wurde der Produktions-Build von Hand in Chrome, weil der Service Worker erst beim Build entsteht. Offline geschaltet wurde in den DevTools. Der Network-Tab zeigt: Die Netzversuche des Service Workers für Seite und Daten schlagen fehl, die Seite bekommt beides trotzdem mit Status 200 aus dem Service Worker. Das entspricht den Regeln Network First für Seiten und Stale While Revalidate für die Daten. Szenario i und ii sind erfüllt, inklusive Filter und Entfernen einer Session ohne Netz. Chrome bietet die Installation an, die App startet im eigenen Fenster ohne Adressleiste.
 
 In Szenario iii lädt ohne Service Worker nichts von FrontRow; Chrome zeigt seine eigene Offline-Seite.
 
