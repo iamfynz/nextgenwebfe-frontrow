@@ -11,7 +11,7 @@ Teammitglieder:     Markus Vogl     (markusvogl@outlook.at)
 
 Repository:         https://github.com/iamfynz/nextgenwebfe-frontrow
 Branch:             main
-Abgabe-Stand:       Schritt 3 in Arbeit: Branch feature/offline-caching, PR #5 (Cross-Review Andrea offen)
+Abgabe-Stand:       Schritt 3 umgesetzt: Offline-Strategie, Cross-Review und beide Testdurchläufe abgeschlossen
 Schritt-3-PRs:      https://github.com/iamfynz/nextgenwebfe-frontrow/pull/4  (Manifest, Icons, erster Service Worker; gemerged)
                     https://github.com/iamfynz/nextgenwebfe-frontrow/pull/5  (Workbox, Offline-Lücken, Dokumente)
 

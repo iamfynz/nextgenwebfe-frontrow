@@ -1,6 +1,6 @@
 # 03 — Entscheidungsprotokoll: Offline und Caching
 
-Stand: 2026-11-15, Entwurf (Markus), nach Code-Review ergänzt. Offen: Abstimmung mit Andrea, Andreas Testdurchlauf.
+Stand: 2026-11-15, Entwurf Markus, von Andrea cross-reviewt und durch einen unabhängigen Testdurchlauf ergänzt.
 Begründung je Datentyp: [02-offline-strategie-konzept.md](02-offline-strategie-konzept.md). Umsetzung: `app/service-worker/sw.ts`.
 
 ## Kontext
@@ -47,8 +47,8 @@ Markus' Durchlauf: 2026-11-15, Chrome 157.0.8103.78 (arm64) auf macOS, Build auf
 - **Aktion:** Offline schalten, `/programm` neu laden.
 - **Erwartung laut Regeln:** Seite kommt aus `frontrow-pages`, die 20 Sessions aus `frontrow-data`, Filter funktionieren.
 - **Beobachtet (Markus, 2026-11-15):** Online lädt `/programm` mit 20 Ergebnissen, der Service Worker steht auf „activated and is running". Nach dem Umschalten auf Offline und Neuladen erscheint die Seite vollständig, wieder mit 20 Ergebnissen und in den richtigen Schriften. Der Track-Filter „Frontend Architecture & Patterns" reduziert die Liste offline auf 4 Ergebnisse. Im Network-Tab sind zwei Zeilen rot: die Netzversuche des Service Workers für `programm` und `conference-data`. Die Seite selbst bekommt `conference-data` mit Status 200 aus dem Service Worker, das Font-Stylesheet kommt aus dem Disk-Cache. Belege: [online](assets/s1-01-online-sw-aktiv.png), [offline neu geladen](assets/s1-02-offline-neu-geladen.png), [Filter](assets/s1-03-offline-filter.png), [Network-Tab](assets/s1-04-offline-network.png).
-- **Beobachtet (Andrea):** _noch einzutragen_
-- **Ergebnis:** Erfüllt. Andreas Durchlauf steht noch aus.
+- **Beobachtet (Andrea, 2026-11-15):** Nach einem frischen Online-Aufruf war der Service Worker aktiv. Im Offline-Modus ließ sich `/programm` neu laden; alle Sessions blieben sichtbar. Ein Track-Filter reduzierte die Liste wie erwartet und funktionierte ohne Netz weiter. Beleg: [Programm offline](assets/s1-andrea-offline-programm.png).
+- **Ergebnis:** Erfüllt in beiden unabhängigen Durchläufen.
 
 ### Szenario ii — „Mein Programm" offline, nachdem Sessions hinzugefügt wurden
 
@@ -56,8 +56,8 @@ Markus' Durchlauf: 2026-11-15, Chrome 157.0.8103.78 (arm64) auf macOS, Build auf
 - **Aktion:** Offline schalten, `/mein-programm` direkt aufrufen bzw. neu laden.
 - **Erwartung laut Regeln:** App-Shell aus `frontrow-pages`, IDs aus dem `localStorage`, Auflösung über `frontrow-data`; beide Sessions erscheinen, Entfernen funktioniert.
 - **Beobachtet (Markus, 2026-11-15):** Durchlauf (a): Online im Programm zwei Sessions gemerkt („Die Zukunft der Web-Frontends", „Headless Components in der Praxis"), beide Buttons zeigen „Gemerkt". Offline bleibt der Zustand auf `/programm` nach dem Neuladen erhalten. `/mein-programm` lädt offline und zeigt „2 Sessions gemerkt" mit beiden Karten samt Zeit, Raum, Level und Speaker. Im Network-Tab schlagen nur die Netzversuche des Service Workers fehl, die Daten kommen aus dem Service Worker. Eine Session offline entfernt und neu geladen: „1 Session gemerkt". Belege: [online](assets/s2-01-online-programm.png), [gemerkt](assets/s2-02-online-gemerkt.png), [offline Programm](assets/s2-03-offline-programm.png), [offline Mein Programm](assets/s2-04-offline-mein-programm.png), [nach Entfernen](assets/s2-05-offline-nach-entfernen.png). Durchlauf (b): Nach dem Neuladen der Startseite ist der Service Worker aktiv. Offline lädt `/programm` neu, obwohl die Seite nie als Dokument online geladen wurde, mit 20 Ergebnissen und Zähler 2 im Header. `/mein-programm` zeigt offline „2 Sessions gemerkt" mit beiden Karten; die Daten kommen aus dem Service Worker. Vom Online-Teil vor dem Umschalten gibt es keinen Screenshot. Belege: [Startseite](assets/s2b-01-startseite-sw-aktiv.png), [offline Programm](assets/s2b-02-offline-programm.png), [offline Mein Programm](assets/s2b-03-offline-mein-programm.png).
-- **Beobachtet (Andrea):** _noch einzutragen_
-- **Ergebnis:** Erfüllt in beiden Abläufen. Andreas Durchlauf steht noch aus.
+- **Beobachtet (Andrea, 2026-11-15):** Zwei online gemerkte Sessions erschienen nach dem Umschalten auf Offline weiterhin unter „Mein Programm“. Das Entfernen einer Session funktionierte ebenfalls offline und blieb nach dem erneuten Öffnen der App erhalten. Beleg: [Mein Programm offline](assets/s2-andrea-offline-mein-programm.png).
+- **Ergebnis:** Erfüllt in beiden unabhängigen Durchläufen.
 
 ### Szenario iii — Erstbesuch im Offline-Zustand (Grenzfall)
 
@@ -65,5 +65,5 @@ Markus' Durchlauf: 2026-11-15, Chrome 157.0.8103.78 (arm64) auf macOS, Build auf
 - **Aktion:** Offline schalten, `/` aufrufen.
 - **Erwartung laut Regeln:** Browser-Fehlerseite. Ohne ersten Online-Kontakt gibt es weder Service Worker noch Cache; das kann eine Web-App nicht verhindern. Akzeptabel, weil die App vor der Konferenz (Ticket-Mail, Website) mindestens einmal online geöffnet wird.
 - **Beobachtet (Markus, 2026-11-15):** Ein erster Versuch war ungültig: Die App war noch in einem zweiten Tab offen, nach „Clear site data" installierte sich sofort ein neuer Service Worker und die Startseite lud offline. Wiederholung: Site-Daten gelöscht, der Service Worker steht auf „deleted" und „redundant", dann offline `http://localhost:3777/` aufgerufen. Von FrontRow lädt nichts. Chrome zeigt seine eingebaute Seite „You're offline" mit dem App-Icon, weil die App auf diesem Rechner noch installiert war. Ohne Installation wäre es die übliche Fehlerseite `ERR_INTERNET_DISCONNECTED`; das wurde nicht eigens getestet. Belege: [Ausgangslage](assets/s3-01-ausgangslage-sw-geloescht.png), [Aufruf offline](assets/s3-02-erstbesuch-offline.png).
-- **Beobachtet (Andrea):** _noch einzutragen_
-- **Ergebnis:** Wie erwartet nicht nutzbar. Wir akzeptieren das als Grenzfall, weil auch eine eigene Offline-Seite erst einmal geladen werden müsste. Andreas Durchlauf steht noch aus.
+- **Beobachtet (Andrea, 2026-11-15):** Nach dem Löschen der Site-Daten und ohne aktiven Service Worker war die App im Offline-Modus nicht erreichbar; Chrome zeigte die erwartete Offline-Fehlerseite. Beleg: [Erstbesuch offline](assets/s3-andrea-erstbesuch-offline.png).
+- **Ergebnis:** Wie erwartet nicht nutzbar. Wir akzeptieren das als Grenzfall, weil auch eine eigene Offline-Seite erst einmal geladen werden müsste.
