@@ -27,6 +27,20 @@
 - **Korrigiert/Abgelehnt:** Die bisherigen nativen Selects wurden ersetzt, weil deren geöffnete Optionsliste die gewünschte Tab-Schleife nicht zuverlässig bietet. Die bestehenden Filterwerte und die Reset-Anbindung wurden beibehalten.
 - **Prüfmethode:** `git diff --check`, `npm run build` und `vue-tsc --noEmit -p .nuxt/tsconfig.app.json` liefen erfolgreich. Der vollständige `npm run typecheck` meldete fehlende Typdefinitionen für `estree 2` und `resolve 2`. Die neue Tastenfolge wurde in diesem Durchlauf nicht im Browser getestet.
 
+- **Nachtrag zur Prüfmethode:** Andrea hat die Filter selbst im Browser getestet und die Tastaturbedienung mit Tab, Esc und Enter als erfolgreich bestätigt. Die Navigation durch die Optionen, die Auswahl und das Schließen der Filter funktionierten im manuellen Test.
+
+## 2026-11-26 · Reflexionsentwurf vorbereiten
+
+- **Tool:** Codex
+- **Prompt:**
+  > Kannst du die Reflexionsfragen vorbereiten?
+  >
+  > Und ich hab getestet was soll ich da noch machenP
+- **Zweck:** Drei projektbezogene Antwortentwürfe für Andreas Einzelreflexion vorbereiten und den bereits durchgeführten Test festhalten.
+- **Übernommen:** Ein als Entwurf gekennzeichneter README-Abschnitt zu Planung, Änderung nach dem eigenen Praxistest und persönlicher Prüfung der Tastaturbedienung.
+- **Korrigiert/Abgelehnt:** Die bisher offene Prüfung wurde um Andreas Rückmeldung ergänzt. Konkrete Testergebnisse wurden aus der knappen Rückmeldung nicht abgeleitet.
+- **Prüfmethode:** Die Entwürfe wurden mit den drei Fragen aus dem Assignment und den bisherigen Einträgen abgeglichen. Andrea prüft die Ich-Aussagen vor der Abgabe auf ihre persönliche Erfahrung.
+
 ## Bewusst nicht mit AI erzeugt
 
 Die Vorgabe für die Filterbedienung habe ich nach eigener Nutzung von FrontRow selbst formuliert. Die gewünschte Reihenfolge der Tasten ergibt sich aus meinem praktischen Test der Filterauswahl. Codex hat diese Vorgabe anschließend im Code umgesetzt.
