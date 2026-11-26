@@ -28,45 +28,18 @@ const level = defineModel<SessionLevel | null>('level', { required: true })
       </div>
 
       <div class="grid flex-[3] gap-control sm:grid-cols-3">
-        <label class="grid gap-section-margin text-small font-bold" for="session-track-filter">
-          Track
-          <select
-            id="session-track-filter"
-            v-model="trackId"
-            class="min-h-12 w-full rounded-input border border-border-light bg-background px-control py-section-margin font-body text-body font-normal text-text-primary focus:border-border-dark focus:outline-2 focus:outline-offset-2 focus:outline-border-dark"
-          >
-            <option :value="null">Alle Tracks</option>
-            <option v-for="track in tracks" :key="track.id" :value="track.id">{{ track.name }}</option>
-          </select>
-        </label>
-
-        <label class="grid gap-section-margin text-small font-bold" for="session-day-filter">
-          Konferenztag
-          <select
-            id="session-day-filter"
-            v-model="day"
-            class="min-h-12 w-full rounded-input border border-border-light bg-background px-control py-section-margin font-body text-body font-normal text-text-primary focus:border-border-dark focus:outline-2 focus:outline-offset-2 focus:outline-border-dark"
-          >
-            <option :value="null">Alle Tage</option>
-            <option v-for="availableDay in days" :key="availableDay" :value="availableDay">
-              {{ formatDay(availableDay, 'medium') }}
-            </option>
-          </select>
-        </label>
-
-        <label class="grid gap-section-margin text-small font-bold" for="session-level-filter">
-          Level
-          <select
-            id="session-level-filter"
-            v-model="level"
-            class="min-h-12 w-full rounded-input border border-border-light bg-background px-control py-section-margin font-body text-body font-normal text-text-primary focus:border-border-dark focus:outline-2 focus:outline-offset-2 focus:outline-border-dark"
-          >
-            <option :value="null">Alle Levels</option>
-            <option v-for="availableLevel in levels" :key="availableLevel" :value="availableLevel">
-              {{ availableLevel }}
-            </option>
-          </select>
-        </label>
+        <SessionFilterSelect v-model="trackId" label="Track" :options="[
+          { value: null, label: 'Alle Tracks' },
+          ...tracks.map(track => ({ value: track.id, label: track.name })),
+        ]" />
+        <SessionFilterSelect v-model="day" label="Konferenztag" :options="[
+          { value: null, label: 'Alle Tage' },
+          ...days.map(day => ({ value: day, label: formatDay(day, 'medium') })),
+        ]" />
+        <SessionFilterSelect v-model="level" label="Level" :options="[
+          { value: null, label: 'Alle Levels' },
+          ...levels.map(level => ({ value: level, label: level })),
+        ]" />
       </div>
 
       <BaseButton

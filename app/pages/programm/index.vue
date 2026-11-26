@@ -37,8 +37,8 @@ const {
     />
 
     <div class="flex items-center justify-between gap-control">
-      <span class="rounded-button bg-background-card px-control py-section-margin text-small font-bold">
-        {{ filteredSessions.length }} Ergebnisse
+      <span role="status" class="rounded-button bg-background-card px-control py-section-margin text-small font-bold">
+        {{ filteredSessions.length }} {{ filteredSessions.length === 1 ? 'Ergebnis' : 'Ergebnisse' }}
       </span>
     </div>
 

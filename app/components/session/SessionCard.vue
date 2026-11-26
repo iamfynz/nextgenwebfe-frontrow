@@ -6,6 +6,7 @@ const props = defineProps<{
 }>()
 
 const formattedDay = computed(() => formatDay(props.session.day))
+const titleId = useId()
 </script>
 
 <template>
@@ -24,7 +25,7 @@ const formattedDay = computed(() => formatDay(props.session.day))
         {{ formattedDay }} · {{ session.startTime }}–{{ session.endTime }} Uhr
       </p>
 
-      <h2 class="mt-section-margin text-text text-heading-small font-bold leading-tight">
+      <h2 :id="titleId" class="mt-section-margin text-text text-heading-small font-bold leading-tight">
         {{ session.title }}
       </h2>
 
@@ -50,10 +51,10 @@ const formattedDay = computed(() => formatDay(props.session.day))
     </div>
 
     <template #footer>
-      <BaseButton :to="`/programm/${session.id}`" variant="secondary">
+      <BaseButton :to="`/programm/${session.id}`" :aria-label="`Details ansehen: ${session.title}`" variant="secondary">
         Details ansehen <span aria-hidden="true">→</span>
       </BaseButton>
-      <ProgramToggle :session-id="session.id" />
+      <ProgramToggle :session-id="session.id" :aria-describedby="titleId" />
     </template>
   </BaseCard>
 </template>
