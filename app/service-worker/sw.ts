@@ -8,6 +8,9 @@ import { NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies'
 
 declare let self: ServiceWorkerGlobalScope
 
+const HTTP_OK = 200
+const HTTP_SERVER_ERROR_MIN = 500
+
 // Service Worker von FrontRow. Gebaut mit Workbox über @vite-pwa/nuxt (Strategie buildSW):
 // Die Regeln stehen hier im Quelltext, Workbox liefert beim Build nur die Precache-Liste dazu.
 // Welche Regel zu welcher Entscheidung gehört: docs/schritt3/02-offline-strategie-konzept.md
@@ -40,7 +43,7 @@ const pageStrategy = new NetworkFirst({
   cacheName: PAGE_CACHE,
   networkTimeoutSeconds: 3,
   plugins: [
-    new CacheableResponsePlugin({ statuses: [200] }),
+    new CacheableResponsePlugin({ statuses: [HTTP_OK] }),
     {
       // Seiten hängen nicht von Query-Parametern ab. Ohne sie im Cache-Schlüssel trifft auch
       // /?utm_source=mail den Eintrag für / und der Cache wächst nicht mit jeder Variante.
@@ -53,7 +56,7 @@ const pageStrategy = new NetworkFirst({
       // Fehlerseite des Servers angezeigt wird, obwohl eine brauchbare Fassung vorliegt.
       // 404 und andere 4xx bleiben echte Antworten.
       fetchDidSucceed: async ({ response }) => {
-        if (response.status >= 500) throw new Error(`Serverfehler ${response.status}`)
+        if (response.status >= HTTP_SERVER_ERROR_MIN) throw new Error(`Serverfehler ${response.status}`)
         return response
       },
     },
@@ -86,7 +89,7 @@ const CONFERENCE_DATA_URL = '/api/conference-data'
 const DATA_CACHE = 'frontrow-data'
 const conferenceDataStrategy = new StaleWhileRevalidate({
   cacheName: DATA_CACHE,
-  plugins: [new CacheableResponsePlugin({ statuses: [200] })],
+  plugins: [new CacheableResponsePlugin({ statuses: [HTTP_OK] })],
 })
 // Die Daten werden schon bei der Installation geladen (install-Schritt unten): Auf SSR-Seiten
 // stecken sie im HTML-Payload, der Browser ruft die Route dann gar nicht ab. Ohne das Vorladen wäre

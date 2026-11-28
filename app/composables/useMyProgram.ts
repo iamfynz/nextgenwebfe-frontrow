@@ -60,7 +60,8 @@ export function useMyProgram() {
   }
 
   function toggle(id: string) {
-    has(id) ? remove(id) : add(id)
+    if (has(id)) remove(id)
+    else add(id)
   }
 
   function clear() {
