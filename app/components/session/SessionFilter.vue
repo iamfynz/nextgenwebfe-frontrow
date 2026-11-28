@@ -28,18 +28,30 @@ const level = defineModel<SessionLevel | null>('level', { required: true })
       </div>
 
       <div class="grid flex-[3] gap-control sm:grid-cols-3">
-        <SessionFilterSelect v-model="trackId" label="Track" :options="[
-          { value: null, label: 'Alle Tracks' },
-          ...tracks.map(track => ({ value: track.id, label: track.name })),
-        ]" />
-        <SessionFilterSelect v-model="day" label="Konferenztag" :options="[
-          { value: null, label: 'Alle Tage' },
-          ...days.map(day => ({ value: day, label: formatDay(day, 'medium') })),
-        ]" />
-        <SessionFilterSelect v-model="level" label="Level" :options="[
-          { value: null, label: 'Alle Levels' },
-          ...levels.map(level => ({ value: level, label: level })),
-        ]" />
+        <SessionFilterSelect
+          v-model="trackId"
+          label="Track"
+          :options="[
+            { value: null, label: 'Alle Tracks' },
+            ...tracks.map(track => ({ value: track.id, label: track.name })),
+          ]"
+        />
+        <SessionFilterSelect
+          v-model="day"
+          label="Konferenztag"
+          :options="[
+            { value: null, label: 'Alle Tage' },
+            ...days.map(day => ({ value: day, label: formatDay(day, 'medium') })),
+          ]"
+        />
+        <SessionFilterSelect
+          v-model="level"
+          label="Level"
+          :options="[
+            { value: null, label: 'Alle Levels' },
+            ...levels.map(level => ({ value: level, label: level })),
+          ]"
+        />
       </div>
 
       <BaseButton

@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   // PWA (Schritt 3): Der Service Worker wird aus app/service-worker/sw.ts gebaut (Workbox, buildSW)
   // und als /sw.js ausgeliefert. Manifest und Registrierung bleiben eigene Dateien:
   // public/manifest.webmanifest und app/plugins/service-worker.client.ts.
-  modules: ['@vite-pwa/nuxt'],
+  modules: ['@vite-pwa/nuxt', '@nuxt/eslint'],
   pwa: {
     strategies: 'buildSW',
     filename: 'sw.js',

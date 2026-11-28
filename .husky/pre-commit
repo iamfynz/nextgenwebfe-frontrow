@@ -1,0 +1,2 @@
+# Qualitäts-Gate (Schritt 4, B): Ein Commit mit Lint-Fehlern oder -Warnungen wird abgebrochen.
+npm run lint

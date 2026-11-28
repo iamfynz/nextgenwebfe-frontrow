@@ -1,0 +1,40 @@
+# Qualitäts-Gate (Schritt 4, B): ESLint und Typecheck für jeden Push und jeden Pull Request.
+# Der Job schlägt bei Lint-Fehlern und -Warnungen fehl (`npm run lint` läuft mit --max-warnings 0).
+name: Lint
+
+on:
+  push:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: ESLint und Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Abhängigkeiten installieren
+        run: npm ci
+
+      # Erzeugt .nuxt/eslint.config.mjs und die Typen, auf denen Lint und Typecheck aufbauen.
+      - name: Nuxt vorbereiten
+        run: npx nuxt prepare
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
