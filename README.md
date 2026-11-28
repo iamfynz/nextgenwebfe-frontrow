@@ -136,3 +136,19 @@ ADR-Punkte entsprechend; Cross-Review und Klick-Test jeweils durch die andere Pe
 - `useConferenceData()`, `useSessions()`, `useSpeakers()` immer mit `await` in `<script setup>` aufrufen.
 - Client-abhängige Logik (`localStorage`, `window`) nur hinter `import.meta.client` / `onMounted`.
 - Rendering pro Route ausschließlich über `routeRules` in `nuxt.config.ts`, nicht in Komponenten.
+
+## AI-Reflexion
+
+### Andrea Windisch
+
+**1. Was hat mich beim AI-Einsatz am meisten überrascht?**
+
+Am meisten überrascht hat mich, wie schnell aus einer allgemeinen Anforderung wie „Tastaturnavigation für die Session-Liste“ ein konkreter Vorschlag für unsere Vue-Komponenten wurde. Codex fand die wiederverwendete Session-Liste, die Kartenaktionen und die Trefferanzeige auf der Programmseite. Trotzdem fiel mir beim Ausprobieren ein weiterer Punkt auf: Die Filterauswahl passte noch nicht zu der Tastenfolge, die ich beim Durchgehen der Seite erwartet hatte. Erst als ich den Ablauf mit Enter, Tab und Esc konkret beschrieben hatte, wurde daraus eine überprüfbare Anforderung. Der praktische Test hat damit den Umfang der Verbesserung mitbestimmt.
+
+**2. Welchen AI-Vorschlag habe ich bewusst verändert und warum?**
+
+Den ersten Zuschnitt des von Codex vorgeschlagenen Features habe ich nach meinem Test erweitert. Die erste Umsetzung konzentrierte sich auf den Wechsel zwischen Session-Karten und auf verständlichere Beschriftungen der Kartenaktionen. Auf der Programmseite komme ich aber zuerst zu den Filtern. Dort fehlte mir ein durchgängiger Ablauf mit der Tastatur. Ich habe deshalb vorgegeben, dass Enter den Filter öffnet, Tab durch die Optionen wechselt, Enter die Auswahl übernimmt und Esc den Filter schließt. Codex setzte dafür eine gemeinsame Komponente für Track, Konferenztag und Level um. Auslöser für die Änderung war mein eigenes Ausprobieren des Ablaufs.
+
+**3. Wo würde ich künftig bewusst auf AI verzichten?**
+
+Den abschließenden Tastaturtest für FrontRow würde ich selbst durchführen. Bei den Filtern möchte ich direkt beobachten, welches Element nach dem Öffnen den Fokus hat, ob ich die letzte Option wieder verlassen kann und wo ich nach Enter oder Esc lande. Ein erfolgreicher Build zeigt, dass die Anwendung kompiliert, liefert aber keinen Nachweis für diesen Ablauf. Bei der Beurteilung ist auch wichtig, ob ich ohne Maus erkenne, wo ich gerade bin und wie ich zum nächsten Filter komme. Das Ergebnis würde ich mit Browser und beobachtetem Verhalten selbst im AI-LOG festhalten.
